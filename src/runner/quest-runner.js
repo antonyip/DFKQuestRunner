@@ -1,3 +1,14 @@
+const { Harmony } = require('@harmony-js/core');
+const {
+    ChainID,
+    ChainType,
+    hexToNumber,
+    numberToHex,
+    fromWei,
+    Units,
+    Unit,
+  } = require('@harmony-js/utils');
+
 const fs = require("fs");
 const readline = require("readline");
 
@@ -10,6 +21,16 @@ const rewardLookup = require("./rewards.json");
 const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 
 let provider, questContract, wallet;
+
+const hmy = new Harmony(
+    getRpc(),
+    {
+        chainType: ChainType.Harmony,
+        chainId: ChainID.HmyMainnet,
+    },
+);
+
+hmy.wallet.addByPrivateKey(process.env.ETH_PRIVATE_KEY);
 
 async function main() {
     try {
@@ -313,7 +334,7 @@ async function startGardeningQuest(quest) {
             console.log(
                 `Starting Gardening Quest for ${oneHero}.`
             );
-            // TODO figure out how to send raw tx
+            // TODO: figure out how to send raw tx
             await tryTransaction(questContract.connect(wallet),2)
         }
     } catch (err) {

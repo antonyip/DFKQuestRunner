@@ -4,7 +4,9 @@
   "description": "Keep your DeFi Kingdoms heroes questing without breaking a sweat.",
   "main": "src/runner/quest-runner",
   "dependencies": {
-    "ethers": "^5.5.2"
+    "@harmony-js/core": "^0.1.57",
+    "ethers": "^5.5.2",
+    "tslib": "^2.3.1"
   },
   "scripts": {
     "start": "node .",
