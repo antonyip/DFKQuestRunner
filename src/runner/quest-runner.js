@@ -326,6 +326,32 @@ async function startQuest(quest) {
     }
 }
 
+function gardeningQuestPattern() {
+    let rv = ""
+    rv += "0xf51333f5" // signature of startQuestWithData
+    rv += "0000000000000000000000000000000000000000000000000000000000000080" // not sure
+    rv += "000000000000000000000000569e6a4c2e3af31b337be00657b4c040c828dd73" // GardeningQuest Contract
+    rv += "0000000000000000000000000000000000000000000000000000000000000001" // ?
+    rv += "00000000000000000000000000000000000000000000000000000000000000c0" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000001" // ? 
+    rv += "0000000000000000000000000000000000000000000000000000000000019553" // heroid
+    rv += "0000000000000000000000000000000000000000000000000000000000000011" // ? - version?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000180" // ? - pool id?
+    rv += "00000000000000000000000000000000000000000000000000000000000001a0" // ? - pool id?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
+    return rv;
+}
+
 async function startGardeningQuest(quest) {
     try {
         if (quest.heroes.length > 0)
@@ -334,12 +360,31 @@ async function startGardeningQuest(quest) {
             console.log(
                 `Starting Gardening Quest for ${oneHero}.`
             );
-            // TODO: figure out how to send raw tx
-            await tryTransaction(questContract.connect(wallet),2)
+
+            const txn = hmy.transactions.newTx({
+                to: config.questContract,
+                value: new Unit(0).asOne().toWei(),
+                // gas limit, you can use string
+                gasLimit: '2000000',
+                // send token from shardID
+                shardID: 0,
+                // send token to toShardID
+                toShardID: 0,
+                // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+                gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+                // tx data
+                data: gardeningQuestPattern()
+            });
+              
+            // sign the transaction use wallet;
+            const signedTxn = await hmy.wallet.signTransaction(txn);
+            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            console.log(txnHash);
+            console.log("i think i started a gardening quest..");
         }
     } catch (err) {
         console.warn(
-            `Error determining questing group - this will be retried next polling interval`
+            `Error starting gardening - this will be retried next polling interval`
         );
     }
 }
