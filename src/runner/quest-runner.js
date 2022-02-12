@@ -153,7 +153,7 @@ async function checkForQuests() {
         // Start Gardening quests needing to start
         let ardeningQuestsToStart = await getDurationQuestsToStart(activeQuests);
         for (const quest of ardeningQuestsToStart) {
-            await startGardeningQuest(quest);
+            await startGardeningQuest(quest, 0); // 0 = one-jewel, 17 = luna-jewel
         }
 
         setTimeout(() => checkForQuests(), config.pollingInterval);
@@ -326,7 +326,10 @@ async function startQuest(quest) {
     }
 }
 
-function gardeningQuestPattern() {
+function gardeningQuestPattern(heroIdInt, poolIdInt) {
+
+    let heroIdHex = numberToHex(heroIdInt).substring(2).padStart(64,'0');
+    let poolIdHex = numberToHex(poolIdInt).substring(2).padStart(64,'0');
     let rv = ""
     rv += "0xf51333f5" // signature of startQuestWithData
     rv += "0000000000000000000000000000000000000000000000000000000000000080" // not sure
@@ -334,8 +337,8 @@ function gardeningQuestPattern() {
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // ?
     rv += "00000000000000000000000000000000000000000000000000000000000000c0" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // ? 
-    rv += "0000000000000000000000000000000000000000000000000000000000019553" // heroid
-    rv += "0000000000000000000000000000000000000000000000000000000000000011" // ? - version?
+    rv += heroIdHex // heroid
+    rv += poolIdHex // poolid (0x0 = one-jewel, 0x11=luna-jewel)
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
@@ -352,7 +355,7 @@ function gardeningQuestPattern() {
     return rv;
 }
 
-async function startGardeningQuest(quest) {
+async function startGardeningQuest(quest, gardenID) {
     try {
         if (quest.heroes.length > 0)
         {
@@ -373,7 +376,7 @@ async function startGardeningQuest(quest) {
                 // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
                 gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
                 // tx data
-                data: gardeningQuestPattern()
+                data: gardeningQuestPattern(oneHero, gardenID)
             });
               
             // sign the transaction use wallet;

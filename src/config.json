@@ -45,8 +45,9 @@
         },
         {
             "name": "Gardening",
-            "professionHeroes": [],
+            "professionHeroes": [104208],
             "nonProfessionHeroes": [],
+            "holdingArea": [65823,103763,103126,120812],
             "contractAddress": "0x569E6a4c2e3aF31B337Be00657B4C040C828Dd73"
         }
     ],
