@@ -123,10 +123,16 @@ async function checkForQuests() {
             await completeQuest(quest.heroes[0]);
         }
 
-        // Start any quests needing to start
+        // Start fishing / foraging quests needing to start
         let questsToStart = await getQuestsToStart(activeQuests);
         for (const quest of questsToStart) {
             await startQuest(quest);
+        }
+
+        // Start Gardening quests needing to start
+        let ardeningQuestsToStart = await getDurationQuestsToStart(activeQuests);
+        for (const quest of ardeningQuestsToStart) {
+            await startGardeningQuest(quest);
         }
 
         setTimeout(() => checkForQuests(), config.pollingInterval);
@@ -187,11 +193,57 @@ async function getQuestsToStart(activeQuests) {
     return questsToStart;
 }
 
+async function getDurationQuestsToStart(activeQuests) {
+    var questsToStart = new Array();
+    var questingHeroes = new Array();
+
+    activeQuests.forEach((q) =>
+        q.heroes.forEach((h) => questingHeroes.push(Number(h)))
+    );
+
+    for (const quest of config.durationQuests) {
+        if (quest.professionHeroes.length > 0) {
+            // TODO: not very good, but this works, just send when stamina is at 21/25 is fine.
+            var readyHeroes = await getHeroesWithGoodStamina(
+                questingHeroes,
+                quest,
+                config.professionMaxAttempts,
+                true
+            );
+            questsToStart.push({
+                name: quest.name,
+                address: quest.contractAddress,
+                professional: true,
+                heroes: readyHeroes,
+                attempts: config.professionMaxAttempts,
+            });
+        }
+
+        if (quest.nonProfessionHeroes.length > 0) {
+            var readyHeroes = await getHeroesWithGoodStamina(
+                questingHeroes,
+                quest,
+                config.nonProfessionMaxAttempts,
+                false
+            );
+            questsToStart.push({
+                name: quest.name,
+                address: quest.contractAddress,
+                professional: false,
+                heroes: readyHeroes,
+                attempts: config.nonProfessionMaxAttempts,
+            });
+        }
+    }
+
+    return questsToStart;
+}
+
 async function getHeroesWithGoodStamina(
     questingHeroes,
     quest,
     maxAttempts,
-    professional
+    professional,
 ) {
     let minStamina = professional ? 5 * maxAttempts : 7 * maxAttempts;
 
@@ -245,6 +297,24 @@ async function startQuest(quest) {
 
             await startQuestBatch(quest, questingGroup);
             batch++;
+        }
+    } catch (err) {
+        console.warn(
+            `Error determining questing group - this will be retried next polling interval`
+        );
+    }
+}
+
+async function startGardeningQuest(quest) {
+    try {
+        if (quest.heroes.length > 0)
+        {
+            let oneHero = quest.heroes.pop();
+            console.log(
+                `Starting Gardening Quest for ${oneHero}.`
+            );
+            // TODO figure out how to send raw tx
+            await tryTransaction(questContract.connect(wallet),2)
         }
     } catch (err) {
         console.warn(
