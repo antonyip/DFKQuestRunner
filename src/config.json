@@ -1,6 +1,6 @@
 {
     "wallet": {
-        "address": "<your 0x Wallet Address>",
+        "address": "0xcD4fd2AEFC7fad24266aa1da67f99Ed465A69656",
         "encryptedWalletPath": "./w.json"
     },
 
@@ -13,14 +13,14 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": [34567],
-            "nonProfessionHeroes": [12345, 23456],
+            "professionHeroes": [77012],
+            "nonProfessionHeroes": [],
             "contractAddress": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc"
         },
         {
             "name": "Foraging",
-            "professionHeroes": [45678, 56789],
-            "nonProfessionHeroes": [67890],
+            "professionHeroes": [103703],
+            "nonProfessionHeroes": [],
             "contractAddress": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4"
         },
         {
@@ -30,14 +30,35 @@
             "contractAddress": "0x0548214A0760a897aF53656F4b69DbAD688D8f29"
         }
     ],
+    "durationQuests" : [
+        {
+            "name": "GoldMining",
+            "professionHeroes": [],
+            "nonProfessionHeroes": [],
+            "contractAddress": "0x569e6a4c2e3af31b337be00657b4c040c828dd73"
+        },
+        {
+            "name": "JewelMining",
+            "professionHeroes": [],
+            "nonProfessionHeroes": [],
+            "contractAddress": "0x6ff019415ee105acf2ac52483a33f5b43eadb8d0"
+        },
+        {
+            "name": "Gardening",
+            "professionHeroes": [],
+            "nonProfessionHeroes": [],
+            "contractAddress": "0x569E6a4c2e3aF31B337Be00657B4C040C828Dd73"
+        }
+    ],
 
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "heroContract": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c",
 
-    "useBackupRpc": false,
+    "useRpcIndex": 2,
     "rpc": {
         "harmonyRpc": "https://api.harmony.one",
-        "poktRpc": "https://harmony-0-rpc.gateway.pokt.network"
+        "poktRpc": "https://harmony-0-rpc.gateway.pokt.network",
+        "otherRpc": "https://api.0xvalidator.one"
     },
 
     "gasPrice": 30000000000,

@@ -34,7 +34,7 @@ async function main() {
 
 async function getEncryptedWallet() {
     console.log("\nHi. You need to enter the password you chose previously.");
-    let pw = await promptForInput("Enter your password: ", "password");
+    let pw = 'a'//await promptForInput("Enter your password: ", "password");
 
     try {
         let encryptedWallet = fs.readFileSync(
@@ -353,7 +353,12 @@ function getRewardDescription(rewardAddress) {
 }
 
 function getRpc() {
-    return config.useBackupRpc ? config.rpc.poktRpc : config.rpc.harmonyRpc;
+    if (config.useRpcIndex == 1)
+        return config.rpc.poktRpc
+    if (config.useRpcIndex == 2)
+        return config.rpc.otherRpc
+
+    return config.rpc.harmonyRpc;
 }
 
 function displayTime(timestamp) {
