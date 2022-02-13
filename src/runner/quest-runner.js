@@ -151,8 +151,8 @@ async function checkForQuests() {
         }
 
         // Start Gardening quests needing to start
-        let ardeningQuestsToStart = await getDurationQuestsToStart(activeQuests);
-        for (const quest of ardeningQuestsToStart) {
+        let GardeningQuestsToStart = await getDurationQuestsToStart(activeQuests);
+        for (const quest of GardeningQuestsToStart) {
             await startGardeningQuest(quest, 0); // 0 = one-jewel, 17 = luna-jewel
         }
 
@@ -183,7 +183,8 @@ async function getQuestsToStart(activeQuests) {
                 questingHeroes,
                 quest,
                 config.professionMaxAttempts,
-                true
+                true,
+                0
             );
             questsToStart.push({
                 name: quest.name,
@@ -199,7 +200,8 @@ async function getQuestsToStart(activeQuests) {
                 questingHeroes,
                 quest,
                 config.nonProfessionMaxAttempts,
-                false
+                false,
+                0
             );
             questsToStart.push({
                 name: quest.name,
@@ -229,7 +231,8 @@ async function getDurationQuestsToStart(activeQuests) {
                 questingHeroes,
                 quest,
                 config.professionMaxAttempts,
-                true
+                true,
+                15
             );
             questsToStart.push({
                 name: quest.name,
@@ -245,7 +248,8 @@ async function getDurationQuestsToStart(activeQuests) {
                 questingHeroes,
                 quest,
                 config.nonProfessionMaxAttempts,
-                false
+                false,
+                15
             );
             questsToStart.push({
                 name: quest.name,
@@ -265,8 +269,13 @@ async function getHeroesWithGoodStamina(
     quest,
     maxAttempts,
     professional,
+    staminaOveride
 ) {
     let minStamina = professional ? 5 * maxAttempts : 7 * maxAttempts;
+    if (staminaOveride > 0)
+    {
+        minStamina = staminaOveride
+    }
 
     let heroes = professional
         ? quest.professionHeroes
