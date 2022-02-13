@@ -156,6 +156,15 @@ async function checkForQuests() {
             await startGardeningQuest(quest, 0); // 0 = one-jewel, 17 = luna-jewel
         }
 
+        // Start Mining quests needing to start
+        /*
+        let GoldMiningQuestsToStart = await getDurationQuestsToStart(activeQuests);
+        for (const quest of GoldMiningQuestsToStart) {
+            await startGoldMiningQuest(quest);
+        }
+        */
+        
+
         setTimeout(() => checkForQuests(), config.pollingInterval);
 
         console.log(`Waiting for ${config.pollingInterval / 1000} seconds...`);
@@ -226,7 +235,6 @@ async function getDurationQuestsToStart(activeQuests) {
 
     for (const quest of config.durationQuests) {
         if (quest.professionHeroes.length > 0) {
-            // TODO: not very good, but this works, just send when stamina is at 21/25 is fine.
             var readyHeroes = await getHeroesWithGoodStamina(
                 questingHeroes,
                 quest,
@@ -364,6 +372,38 @@ function gardeningQuestPattern(heroIdInt, poolIdInt) {
     return rv;
 }
 
+function goldMineQuestPattern(heroIdInt0,heroIdInt1,heroIdInt2,heroIdInt3,heroIdInt4,heroIdInt5) {
+
+    let heroIdHex0 = numberToHex(heroIdInt0).substring(2).padStart(64,'0');
+    let heroIdHex1 = numberToHex(heroIdInt1).substring(2).padStart(64,'0');
+    let heroIdHex2 = numberToHex(heroIdInt2).substring(2).padStart(64,'0');
+    let heroIdHex3 = numberToHex(heroIdInt3).substring(2).padStart(64,'0');
+    let heroIdHex4 = numberToHex(heroIdInt4).substring(2).padStart(64,'0');
+    let heroIdHex5 = numberToHex(heroIdInt5).substring(2).padStart(64,'0');
+
+    let heroCount = 0;
+    if (heroIdInt0 > 0) heroCount += 1;
+    if (heroIdInt1 > 0) heroCount += 1;
+    if (heroIdInt2 > 0) heroCount += 1;
+    if (heroIdInt3 > 0) heroCount += 1;
+    if (heroIdInt4 > 0) heroCount += 1;
+    if (heroIdInt5 > 0) heroCount += 1;
+
+    let rv = ""
+    rv += "0xc855dea3" // signature of startQuest?
+    rv += "0000000000000000000000000000000000000000000000000000000000000060" // i think its questtype
+    rv += "000000000000000000000000569e6a4c2e3af31b337be00657b4c040c828dd73" // quest contract
+    rv += ("000000000000000000000000000000000000000000000000000000000000000" + heroCount.toString()) // hero count
+    rv += "0000000000000000000000000000000000000000000000000000000000000001" // num heroes i think
+    if (heroIdInt0 > 0) { rv += heroIdHex0 } // hero ids
+    if (heroIdInt1 > 0) { rv += heroIdHex1 }
+    if (heroIdInt2 > 0) { rv += heroIdHex2 }
+    if (heroIdInt3 > 0) { rv += heroIdHex3 }
+    if (heroIdInt4 > 0) { rv += heroIdHex4 }
+    if (heroIdInt5 > 0) { rv += heroIdHex5 }
+    return rv;
+}
+
 async function startGardeningQuest(quest, gardenID) {
     try {
         if (quest.heroes.length > 0)
@@ -397,6 +437,56 @@ async function startGardeningQuest(quest, gardenID) {
     } catch (err) {
         console.warn(
             `Error starting gardening - this will be retried next polling interval`
+        );
+    }
+}
+
+
+async function startGoldMiningQuest(quest) {
+    try {
+        if (quest.heroes.length > 0)
+        {
+            // just add 6 more heroes for now
+            quest.heroes.push(0)
+            quest.heroes.push(0)
+            quest.heroes.push(0)
+            quest.heroes.push(0)
+            quest.heroes.push(0)
+            quest.heroes.push(0)
+            let oneHero1 = quest.heroes.pop();
+            let oneHero2 = quest.heroes.pop();
+            let oneHero3 = quest.heroes.pop();
+            let oneHero4 = quest.heroes.pop();
+            let oneHero5 = quest.heroes.pop();
+            let oneHero6 = quest.heroes.pop();
+            console.log(
+                `Starting Gardening Quest for ${oneHero1} ${oneHero2} ${oneHero3} ${oneHero4} ${oneHero5} ${oneHero6}.`
+            );
+
+            const txn = hmy.transactions.newTx({
+                to: config.questContract,
+                value: new Unit(0).asOne().toWei(),
+                // gas limit, you can use string
+                gasLimit: '2000000',
+                // send token from shardID
+                shardID: 0,
+                // send token to toShardID
+                toShardID: 0,
+                // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+                gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+                // tx data
+                data: goldMineQuestPattern(oneHero1, oneHero2, oneHero3, oneHero4, oneHero5, oneHero6)
+            });
+              
+            // sign the transaction use wallet;
+            const signedTxn = await hmy.wallet.signTransaction(txn);
+            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            console.log(txnHash);
+            console.log("i think i started a gold mining quest..");
+        }
+    } catch (err) {
+        console.warn(
+            `Error starting gold mining - this will be retried next polling interval`
         );
     }
 }
