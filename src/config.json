@@ -59,7 +59,8 @@
     "rpc": {
         "harmonyRpc": "https://api.harmony.one",
         "poktRpc": "https://harmony-0-rpc.gateway.pokt.network",
-        "otherRpc": "https://api.0xvalidator.one"
+        "otherRpc": "https://api.0xvalidator.one",
+        "anotherHarmonyRpc": "https://a.api.s0.t.hmny.io"
     },
 
     "gasPrice": 30000000000,
