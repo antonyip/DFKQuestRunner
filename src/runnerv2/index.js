@@ -263,7 +263,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     LocalBatching = []
     for (let index = 0; index < possibleFishers.length; index++) {
         const stam = staminaValues[index];
-        if ( stam > minStam )
+        if ( stam >= minStam )
         {
             LocalBatching.push(possibleFishers[index]);
         }
@@ -275,6 +275,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
         }
     }
 
+    let numHeroesToSend = LocalBatching.length;
     // fill the last batch up
     if (LocalBatching.length > 0)
     {
@@ -287,7 +288,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     console.log("Fishing Batches" + (isPro ? " (P): " : " (N): ") + LocalBatching)
 
     // be lazy only send 1 batch for now.. next minute can send another
-    if (LocalBatching.length >= minBatch)
+    if (numHeroesToSend >= minBatch)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -357,7 +358,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
     LocalBatching = []
     for (let index = 0; index < possibleForagers.length; index++) {
         const stam = staminaValues[index];
-        if ( stam > minStam)
+        if ( stam >= minStam )
         {
             LocalBatching.push(possibleForagers[index]);
         }
@@ -369,6 +370,8 @@ async function CheckAndSendForagers(heroesStruct, isPro)
         }
     }
 
+
+    let numHeroesToSend = LocalBatching.length;
     // fill the last batch up
     if (LocalBatching.length > 0)
     {
@@ -382,7 +385,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
     // be lazy only send 1 batch for now.. next minute can send another
     
-    if (LocalBatching.length >= minBatch)
+    if (numHeroesToSend >= minBatch)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -449,7 +452,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     LocalBatching = []
     for (let index = 0; index < possibleGoldMiners.length; index++) {
         const stam = staminaValues[index];
-        if ( stam > minStam)
+        if ( stam >= minStam )
         {
             LocalBatching.push(possibleGoldMiners[index]);
         }
@@ -460,6 +463,8 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             break;
         }
     }
+
+    let numHeroesToSend = LocalBatching.length;
 
     // fill the last batch up
     if (LocalBatching.length > 0)
@@ -474,7 +479,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
     // be lazy only send 1 batch for now.. next minute can send another
     
-    if (LocalBatching.length >= minMiners)
+    if (numHeroesToSend >= minMiners)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -538,7 +543,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     LocalBatching = []
     for (let index = 0; index < possibleGardeners.length; index++) {
         const stam = staminaValues[index];
-        if (stam > minStam)
+        if ( stam >= minStam )
         {
             LocalBatching.push(possibleGardeners[index]);
         }
