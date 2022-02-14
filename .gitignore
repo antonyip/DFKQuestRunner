@@ -2,8 +2,6 @@
 playground/
 
 #config
-config.json
-myconfig.json
 w.json
 
 # Logs
