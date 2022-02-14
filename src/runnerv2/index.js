@@ -49,23 +49,47 @@ async function getActiveQuests()
     return results
 }
 
+function completeQuestPattern(heroID)
+{
+    let rv = ""
+    rv += "0x528be0a9" // Complete Quest
+    rv += intToInput(heroID) // ?
+    return rv
+}
+
 async function CompleteQuests(heroesStruct)
 {
-    let allPromises = []
-    heroesStruct.completedQuesters.forEach( heroId => {
-        allPromises.push(questContract.methods.completeQuest(heroId).call())
-    })
-
-    if (GlobalSignOn === true)
+    if (heroesStruct.completedQuesters.length > 0)
     {
-        await Promise.all(allPromises)
-    }
-    
-    if(allPromises.length > 1)
-    {
-        console.log("Completed some quests :P")
+        const completedHeroId = heroesStruct.completedQuesters[0];
+        const txn = hmy.transactions.newTx({
+            to: config.questContract,
+            value: new Unit(0).asOne().toWei(),
+            // gas limit, you can use string
+            gasLimit: '2000000',
+            // send token from shardID
+            shardID: 0,
+            // send token to toShardID
+            toShardID: 0,
+            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            // tx data
+            data: completeQuestPattern(completedHeroId)
+        });
+          
+        // sign the transaction use wallet;
+        const signedTxn = await hmy.wallet.signTransaction(txn);
+        //  console.log(signedTxn);
+        if (true || GlobalSignOn === true)
+        {
+            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            console.log("!!! sending the message on the wire!!!");
+            console.log("Completed Quest for heroid:" + completedHeroId);
+            //  console.log(txnHash);
+        }
     }
 
+    console.log("CompleteQuests Return")
     return;
 }
 
@@ -202,7 +226,8 @@ function gardeningQuestPattern(heroIdInt, poolIdInt) {
 
 async function CheckAndSendFishers(heroesStruct)
 {
-    let minStam = 5;
+    let minStam = 25;
+    let fishingTries = 5;
     let proStamUsage = 5;
     let normStamUsage = 7;
     let maxBatchFisher = 6;
@@ -228,13 +253,13 @@ async function CheckAndSendFishers(heroesStruct)
     });
 
     let staminaValues = await Promise.all(FisherPromises)
-
+    //console.log("fsh stam: " + staminaValues);
     
     // Batching fishers. we only take 6. -> next iteration then we go again
     LocalBatching = []
     for (let index = 0; index < possibleFishers.length; index++) {
         const stam = staminaValues[index];
-        if ( stam > minStam)
+        if ( stam > minStam )
         {
             LocalBatching.push(possibleFishers[index]);
         }
@@ -273,16 +298,16 @@ async function CheckAndSendFishers(heroesStruct)
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
             gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
             // tx data
-            data: fishingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],5)
+            data: fishingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],fishingTries)
         });
           
         // sign the transaction use wallet;
         const signedTxn = await hmy.wallet.signTransaction(txn);
         //  console.log(signedTxn);
-        if (GlobalSignOn === true)
+        if (true || GlobalSignOn === true)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-            console.log("sending the message on the wire!!!");
+            console.log("!!! sending the message on the wire!!!");
             //  console.log(txnHash);
         }
         
@@ -373,7 +398,7 @@ async function CheckAndSendForagers(heroesStruct)
         if (GlobalSignOn === true)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-            console.log("sending the message on the wire!!!");
+            console.log("!!! sending the message on the wire!!!");
             //  console.log(txnHash);
         }
         
@@ -384,7 +409,8 @@ async function CheckAndSendForagers(heroesStruct)
 }
 async function CheckAndSendGoldMiners(heroesStruct)
 {
-    let minStam = 5;
+    let minStam = 15;
+    let minMiners = 2;
     let proStamUsage = 5;
     let normStamUsage = 7;
     let maxBatchFisher = 6;
@@ -441,7 +467,7 @@ async function CheckAndSendGoldMiners(heroesStruct)
 
     // be lazy only send 1 batch for now.. next minute can send another
     
-    if (LocalBatching.length > 0)
+    if (LocalBatching.length >= minMiners)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -464,7 +490,7 @@ async function CheckAndSendGoldMiners(heroesStruct)
         if (GlobalSignOn === true)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-            console.log("sending the message on the wire!!!");
+            console.log("!!! sending the message on the wire!!!");
             //  console.log(txnHash);
         }
         
@@ -534,7 +560,7 @@ async function CheckAndSendGardeners(heroesStruct)
         if (GlobalSignOn === true)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-            console.log("sending the message on the wire!!!");
+            console.log("!!! sending the message on the wire!!!");
             //  console.log(txnHash);
         }
         
@@ -552,12 +578,12 @@ function ParseActiveQuests(activeQuests)
     let completedQuestsArray = [];
     activeQuests.forEach(element => {
         leadQuestersArray.push(element.heroes[0].toString());
-        let completedDate = new Date(element.completeAtTime * 1000).toLocaleTimeString()
-        if (completedDate > timenow)
+        let questCompletedDate = new Date(element.completeAtTime*1000)
+        if (questCompletedDate < Date.now())
         {
             completedQuestsArray.push(element.heroes[0].toString());
         }
-        autils.log(element.heroes[0].toString() + " Questing till: " +  completedDate)
+        autils.log(element.heroes[0].toString() + " Questing till: " +  questCompletedDate.toLocaleTimeString())
         element.heroes.forEach(hero => {
             allQuestersArray.push(hero.toString());
         })
@@ -575,10 +601,11 @@ function ParseActiveQuests(activeQuests)
 async function main() {
     try {
         
+        console.log(" --" + new Date().toLocaleTimeString());
         let activeQuests = await getActiveQuests();
 
         let heroesStruct = ParseActiveQuests(activeQuests);
-        //console.log(heroesStruct);
+        console.log(heroesStruct);
 
         await CompleteQuests(heroesStruct);
 
@@ -588,6 +615,7 @@ async function main() {
         await CheckAndSendGardeners(heroesStruct);
 
         console.log("runok!");
+        console.log(" ");
 
     }
     catch(error)
