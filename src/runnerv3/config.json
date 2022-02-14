@@ -1,7 +1,5 @@
 {
-    "wallet": "0xcD4fd2AEFC7fad24266aa1da67f99Ed465A69656",
-    "walletHolding": "0x0Ba43bAe4613E03492e4C17Af3B014B6c3202B9d",
-    "walletHolding2": "0xcD4fd2AEFC7fad24266aa1da67f99Ed465A69656",
+    "wallet": "0x0Ba43bAe4613E03492e4C17Af3B014B6c3202B9d",
     "pollingInterval": "60",
     "quests": [
         {
@@ -14,7 +12,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["103703"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
             "holdingArea": ["103703"],
             "proMinStam": 25,
@@ -30,7 +28,7 @@
         {
             "name": "GoldMining",
             "professionHeroes": [],
-            "nonProfessionHeroes": ["77012","121822"],
+            "nonProfessionHeroes": [],
             "holdingArea": ["121822","77012"],
             "proMinStam": 15,
             "normMinStam": 15,
@@ -46,11 +44,11 @@
         },
         {
             "name": "Gardening",
-            "professionHeroes": ["104208"],
+            "professionHeroes": ["65823","103763","103126","120812"],
             "nonProfessionHeroes": [],
             "proMinStam": 15,
             "normMinStam": 15,
-            "poolID": 0,
+            "poolID": 17,
             "holdingArea": ["104208","65823","103763","103126","120812"],
             "contractAddress": "0xe4154b6e5d240507f9699c730a496790a722df19"
         }
