@@ -46,12 +46,12 @@
         },
         {
             "name": "Gardening",
-            "professionHeroes": ["104208"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
             "proMinStam": 15,
             "normMinStam": 15,
             "poolID": 0,
-            "holdingArea": ["104208","65823","103763","103126","120812"],
+            "holdingArea": ["65823","103763","103126","120812"],
             "contractAddress": "0xe4154b6e5d240507f9699c730a496790a722df19"
         }
     ],
