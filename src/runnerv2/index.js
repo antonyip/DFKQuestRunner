@@ -15,6 +15,9 @@ const autils = require("./autils")
 const abi = require("./abi.json")
 const GlobalSignOn = true;
 
+let eBreakCount = 0;
+const eBreakLimit = 5;
+
 const hmy = new Harmony(
     autils.getRpc(config.useRpcIndex),
     {
@@ -66,7 +69,7 @@ async function CompleteQuests(heroesStruct)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -84,6 +87,7 @@ async function CompleteQuests(heroesStruct)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             console.log("Completed Quest for heroid:" + completedHeroId);
             //  console.log(txnHash);
         }
@@ -294,7 +298,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -312,6 +316,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
@@ -322,7 +327,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 }
 async function CheckAndSendForagers(heroesStruct, isPro)
 {
-    let minBatch = 1;
+    let minBatch = 4;
 
     // too lazy to change struct in config
     let questType = config.quests[1]
@@ -391,7 +396,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -409,10 +414,11 @@ async function CheckAndSendForagers(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
-        console.log("Sent " + LocalBatching + " on a " + (isPro ? "professional" : "normal") + "Fishing Quest")
+        console.log("Sent " + LocalBatching + " on a " + (isPro ? "professional" : "normal") + "Foraging Quest")
     }
     
     return;
@@ -485,7 +491,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -503,6 +509,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
@@ -557,7 +564,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -575,6 +582,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
@@ -616,6 +624,13 @@ async function main() {
     try {
         
         console.log(" --" + new Date().toLocaleTimeString());
+
+        if (eBreakCount > eBreakLimit)
+        {
+            console.log("eBreakLimit Hit!!");
+            process.exit(0);
+        }
+
         let activeQuests = await getActiveQuests();
 
         let heroesStruct = ParseActiveQuests(activeQuests);

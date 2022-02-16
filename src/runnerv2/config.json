@@ -59,7 +59,7 @@
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "heroContract": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c",
 
-    "useRpcIndex": 2,
+    "useRpcIndex": 1,
     "rpcs": 
         [
             "https://api.harmony.one",

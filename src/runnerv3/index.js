@@ -15,6 +15,9 @@ const autils = require("./autils")
 const abi = require("./abi.json")
 const GlobalSignOn = true;
 
+let eBreakCount = 0;
+const eBreakLimit = 5;
+
 const hmy = new Harmony(
     autils.getRpc(config.useRpcIndex),
     {
@@ -66,7 +69,7 @@ async function CompleteQuests(heroesStruct)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -84,6 +87,7 @@ async function CompleteQuests(heroesStruct)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             console.log("Completed Quest for heroid:" + completedHeroId);
             //  console.log(txnHash);
         }
@@ -294,7 +298,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -312,6 +316,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
@@ -322,7 +327,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 }
 async function CheckAndSendForagers(heroesStruct, isPro)
 {
-    let minBatch = 1;
+    let minBatch = 4;
 
     // too lazy to change struct in config
     let questType = config.quests[1]
@@ -391,7 +396,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -409,10 +414,11 @@ async function CheckAndSendForagers(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
-        console.log("Sent " + LocalBatching + " on a " + (isPro ? "professional" : "normal") + "Fishing Quest")
+        console.log("Sent " + LocalBatching + " on a " + (isPro ? "professional" : "normal") + "Foraging Quest")
     }
     
     return;
@@ -421,9 +427,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 {
     let minStam = 15;
     let minMiners = 2;
-    let proStamUsage = 5;
-    let normStamUsage = 7;
-    let maxBatchFisher = 6;
+    let maxBatchGoldMiner = 6;
 
     // too lazy to change struct in config
     let questType = config.quests[3]
@@ -432,8 +436,10 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         throw new Error("GoldMining config index was changed");
     }
 
+    minStam = isPro ? questType.proMinStam : questType.normMinStam;
+
     let activeQuesters = heroesStruct.allQuesters
-    let configGoldMiners = questType.nonProfessionHeroes
+    let configGoldMiners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
     //console.log(activeQuesters);
     //console.log(configForagers);
     let possibleGoldMiners = configGoldMiners.filter((e) => {
@@ -458,7 +464,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         }
 
         // list full
-        if (LocalBatching.length === maxBatchFisher)
+        if (LocalBatching.length === maxBatchGoldMiner)
         {
             break;
         }
@@ -469,7 +475,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     // fill the last batch up
     if (LocalBatching.length > 0)
     {
-        while(LocalBatching.length < maxBatchFisher)
+        while(LocalBatching.length < maxBatchGoldMiner)
         {
             LocalBatching.push(0)
         }
@@ -485,7 +491,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -503,10 +509,11 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
-        console.log("Sent " + LocalBatching + " on a Mining Quest")
+        console.log("Sent " + LocalBatching + " on a Gold Mining Quest")
     }
     
     return;
@@ -514,8 +521,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
 async function CheckAndSendGardeners(heroesStruct, isPro)
 {
-    let minStam = 15;
-    
+    let minStam = 15
 
     // too lazy to change struct in config
     let questType = config.quests[5]
@@ -524,8 +530,10 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         throw new Error("Gardening config index was changed");
     }
 
+    minStam = isPro ? questType.proMinStam : questType.normMinStam
+
     let activeQuesters = heroesStruct.allQuesters
-    let configGardeners = questType.professionHeroes
+    let configGardeners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
     let liquidityPoolID = questType.poolID;
     //console.log(activeQuesters);
     //console.log(configForagers);
@@ -557,7 +565,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '2000000',
+            gasLimit: '5500000',
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -575,6 +583,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
             //  console.log(txnHash);
         }
         
@@ -616,6 +625,13 @@ async function main() {
     try {
         
         console.log(" --" + new Date().toLocaleTimeString());
+
+        if (eBreakCount > eBreakLimit)
+        {
+            console.log("eBreakLimit Hit!!");
+            process.exit(0);
+        }
+
         let activeQuests = await getActiveQuests();
 
         let heroesStruct = ParseActiveQuests(activeQuests);
@@ -628,8 +644,8 @@ async function main() {
         await CheckAndSendForagers(heroesStruct, false);
         await CheckAndSendForagers(heroesStruct, true);
         await CheckAndSendGoldMiners(heroesStruct, false);
-        //await CheckAndSendGoldMiners(heroesStruct, true);
-        //await CheckAndSendGardeners(heroesStruct, false);
+        await CheckAndSendGoldMiners(heroesStruct, true);
+        await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
 
         console.log("runok!");
