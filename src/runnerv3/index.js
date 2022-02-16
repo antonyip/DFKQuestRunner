@@ -521,7 +521,8 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
 async function CheckAndSendGardeners(heroesStruct, isPro)
 {
-    let minStam = 15
+    let minStam = 15;
+    
 
     // too lazy to change struct in config
     let questType = config.quests[5]
