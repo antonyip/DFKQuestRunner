@@ -229,15 +229,13 @@ function gardeningQuestPattern(heroIdInt, poolIdInt) {
 
 async function CheckAndSendFishers(heroesStruct, isPro)
 {
-    let minBatch = 1;
-    
-    // too lazy to change struct in config
     let questType = config.quests[0]
     if (questType.name !== "Fishing")
     {
         throw new Error("config index was changed");
     }
 
+    let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
     let maxBatch = 6;
     let proStamUsage = 5;
     let normStamUsage = 7;
@@ -273,7 +271,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
         }
 
         // list full
-        if (LocalBatching.length === maxBatchFisher)
+        if (LocalBatching.length === maxBatch)
         {
             break;
         }
@@ -283,7 +281,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     // fill the last batch up
     if (LocalBatching.length > 0)
     {
-        while(LocalBatching.length < maxBatchFisher)
+        while(LocalBatching.length < maxBatch)
         {
             LocalBatching.push(0)
         }
@@ -292,7 +290,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     console.log("Fishing Batches" + (isPro ? " (P): " : " (N): ") + LocalBatching)
 
     // be lazy only send 1 batch for now.. next minute can send another
-    if (numHeroesToSend >= minBatch)
+    if (numHeroesToSend >= minBatch && minBatch > 0)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -327,8 +325,6 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 }
 async function CheckAndSendForagers(heroesStruct, isPro)
 {
-    let minBatch = 4;
-
     // too lazy to change struct in config
     let questType = config.quests[1]
     if (questType.name !== "Foraging")
@@ -336,6 +332,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
         throw new Error("config index was changed");
     }
 
+    let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
     let maxBatch = 6;
     let proStamUsage = 5;
     let normStamUsage = 7;
@@ -390,7 +387,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
     // be lazy only send 1 batch for now.. next minute can send another
     
-    if (numHeroesToSend >= minBatch)
+    if (numHeroesToSend >= minBatch && minBatch > 0)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -425,10 +422,6 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 }
 async function CheckAndSendGoldMiners(heroesStruct, isPro)
 {
-    let minStam = 15;
-    let minMiners = 2;
-    let maxBatchGoldMiner = 6;
-
     // too lazy to change struct in config
     let questType = config.quests[3]
     if (questType.name !== "GoldMining")
@@ -436,7 +429,9 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         throw new Error("GoldMining config index was changed");
     }
 
-    minStam = isPro ? questType.proMinStam : questType.normMinStam;
+    let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
+    let maxBatch = 6;
+    let minStam = isPro ? questType.proMinStam : questType.normMinStam;
 
     let activeQuesters = heroesStruct.allQuesters
     let configGoldMiners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
@@ -464,7 +459,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         }
 
         // list full
-        if (LocalBatching.length === maxBatchGoldMiner)
+        if (LocalBatching.length === maxBatch)
         {
             break;
         }
@@ -475,7 +470,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     // fill the last batch up
     if (LocalBatching.length > 0)
     {
-        while(LocalBatching.length < maxBatchGoldMiner)
+        while(LocalBatching.length < maxBatch)
         {
             LocalBatching.push(0)
         }
@@ -485,7 +480,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
     // be lazy only send 1 batch for now.. next minute can send another
     
-    if (numHeroesToSend >= minMiners)
+    if (numHeroesToSend >= minBatch && minBatch > 0)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
@@ -521,17 +516,14 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
 async function CheckAndSendGardeners(heroesStruct, isPro)
 {
-    let minStam = 15;
-    
-
     // too lazy to change struct in config
     let questType = config.quests[5]
     if (questType.name !== "Gardening")
     {
         throw new Error("Gardening config index was changed");
     }
-
-    minStam = isPro ? questType.proMinStam : questType.normMinStam
+    
+    let minStam = isPro ? questType.proMinStam : questType.normMinStam
 
     let activeQuesters = heroesStruct.allQuesters
     let configGardeners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
@@ -596,7 +588,6 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
 function ParseActiveQuests(activeQuests)
 {
-    let timenow = new Date();
     let leadQuestersArray = [];
     let allQuestersArray = [];
     let completedQuestsArray = [];
