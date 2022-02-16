@@ -46,8 +46,8 @@
             "name": "Gardening",
             "professionHeroes": ["120812","103763","103126"],
             "nonProfessionHeroes": [],
-            "proMinStam": 16,
-            "normMinStam": 16,
+            "proMinStam": 20,
+            "normMinStam": 20,
             "poolID": 17,
             "holdingArea": ["104208","65823","103763","103126","120812"],
             "contractAddress": "0xe4154b6e5d240507f9699c730a496790a722df19"
@@ -68,5 +68,5 @@
     ,
 
     "gasPrice": 30000000000,
-    "gasLimit": 1000000
+    "gasLimit": 10000000
 }

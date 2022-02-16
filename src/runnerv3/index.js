@@ -63,7 +63,6 @@ async function CompleteQuests(heroesStruct)
     if (heroesStruct.completedQuesters.length > 0)
     {
         const completedHeroId = heroesStruct.completedQuesters[0];
-        const completedHeroCount = heroesStruct.completedQuestersCountArray[0];
         // let GasLimit = await hmy.blockchain.estimateGas({ 
         //     from: config.wallet,
         //     to: config.questContract,
@@ -75,7 +74,7 @@ async function CompleteQuests(heroesStruct)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit * completedHeroCount * 2,
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -307,7 +306,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit * numHeroesToSend,
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -409,7 +408,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit * numHeroesToSend,
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -507,7 +506,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit * numHeroesToSend,
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -586,7 +585,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit * numHeroesToSend,
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -671,9 +670,9 @@ async function main() {
         await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
 
-        if (oldLimit === eBreakLimit)
+        if (oldLimit === eBreakCount)
         {
-            eBreakLimit = 0;
+            eBreakCount = 0;
         }
 
         console.log("runok!");

@@ -71,5 +71,5 @@
     ,
 
     "gasPrice": 30000000000,
-    "gasLimit": 1000000
+    "gasLimit": 10000000
 }
