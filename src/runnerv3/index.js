@@ -47,8 +47,6 @@ let heroContract = hmy.contracts.createContract(
 async function getActiveQuests()
 {
     let results = await questContract.methods.getActiveQuests(config.wallet).call()
-    //let results = await questContract.methods.getActiveQuests("0x0Ba43bAe4613E03492e4C17Af3B014B6c3202B9d").call()
-    //console.log(results)
     return results
 }
 
@@ -65,11 +63,19 @@ async function CompleteQuests(heroesStruct)
     if (heroesStruct.completedQuesters.length > 0)
     {
         const completedHeroId = heroesStruct.completedQuesters[0];
+        const completedHeroCount = heroesStruct.completedQuestersCountArray[0];
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     from: config.wallet,
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: completeQuestPattern(completedHeroId)
+        // })
+
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit,
+            gasLimit: config.gasLimit * completedHeroCount * 2,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -89,7 +95,7 @@ async function CompleteQuests(heroesStruct)
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             console.log("Completed Quest for heroid:" + completedHeroId);
-            //  console.log(txnHash);
+            
         }
     }
 
@@ -292,11 +298,16 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     // be lazy only send 1 batch for now.. next minute can send another
     if (numHeroesToSend >= minBatch && minBatch > 0)
     {
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: fishingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],fishingTries) })
+
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit,
+            gasLimit: config.gasLimit * numHeroesToSend,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -389,11 +400,16 @@ async function CheckAndSendForagers(heroesStruct, isPro)
     
     if (numHeroesToSend >= minBatch && minBatch > 0)
     {
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: foragingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],foragingTries) })
+
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit,
+            gasLimit: config.gasLimit * numHeroesToSend,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -482,11 +498,16 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     
     if (numHeroesToSend >= minBatch && minBatch > 0)
     {
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5]) })
+
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit,
+            gasLimit: config.gasLimit * numHeroesToSend,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -497,6 +518,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5])
         });
           
+        
         // sign the transaction use wallet;
         const signedTxn = await hmy.wallet.signTransaction(txn);
         //  console.log(signedTxn);
@@ -554,11 +576,17 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     if (LocalBatching.length > 0)
     {
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
+        // })
+        
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: config.gasLimit,
+            gasLimit: config.gasLimit * numHeroesToSend,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -591,12 +619,14 @@ function ParseActiveQuests(activeQuests)
     let leadQuestersArray = [];
     let allQuestersArray = [];
     let completedQuestsArray = [];
+    let completedQuestersCountArray = []
     activeQuests.forEach(element => {
         leadQuestersArray.push(element.heroes[0].toString());
         let questCompletedDate = new Date(element.completeAtTime*1000)
         if (questCompletedDate < Date.now())
         {
             completedQuestsArray.push(element.heroes[0].toString());
+            completedQuestersCountArray.push(element.heroes.length);
         }
         autils.log(element.heroes[0].toString() + " Questing till: " +  questCompletedDate.toLocaleTimeString())
         element.heroes.forEach(hero => {
@@ -607,7 +637,8 @@ function ParseActiveQuests(activeQuests)
     let rv = {
         leadQuesters: leadQuestersArray,
         allQuesters: allQuestersArray,
-        completedQuesters: completedQuestsArray
+        completedQuesters: completedQuestsArray,
+        completedQuestersCount: completedQuestersCountArray
     }
     return rv;
 }
@@ -617,7 +648,7 @@ async function main() {
     try {
         
         console.log(" --" + new Date().toLocaleTimeString());
-
+        const oldLimit = eBreakCount;
         if (eBreakCount > eBreakLimit)
         {
             console.log("eBreakLimit Hit!!");
@@ -639,6 +670,11 @@ async function main() {
         await CheckAndSendGoldMiners(heroesStruct, true);
         await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
+
+        if (oldLimit === eBreakLimit)
+        {
+            eBreakLimit = 0;
+        }
 
         console.log("runok!");
         console.log(" ");

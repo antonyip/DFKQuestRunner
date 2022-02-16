@@ -65,10 +65,11 @@
             "https://api.harmony.one",
             "https://harmony-0-rpc.gateway.pokt.network",
             "https://api.0xvalidator.one",
+            "https://api.s0.t.hmny.io",
             "https://a.api.s0.t.hmny.io"
         ]
     ,
 
     "gasPrice": 30000000000,
-    "gasLimit": 10000000
+    "gasLimit": 1000000
 }
