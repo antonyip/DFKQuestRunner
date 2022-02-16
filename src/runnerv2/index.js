@@ -69,7 +69,7 @@ async function CompleteQuests(heroesStruct)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '5500000',
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -296,7 +296,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '5500000',
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -393,7 +393,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '5500000',
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -486,7 +486,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '5500000',
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
@@ -558,7 +558,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
-            gasLimit: '5500000',
+            gasLimit: config.gasLimit,
             // send token from shardID
             shardID: 0,
             // send token to toShardID
