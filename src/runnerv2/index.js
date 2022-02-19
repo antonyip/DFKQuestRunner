@@ -681,6 +681,7 @@ async function main() {
     }
     catch(error)
     {
+        eBreakCount += 1;
         autils.log(error);
     }
 }

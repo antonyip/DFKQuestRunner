@@ -2,6 +2,6 @@
 
 while true
 do
-  npm start
-  sleep 1
+  node index.js
+  sleep 4800
 done
