@@ -642,7 +642,16 @@ function ParseActiveQuests(activeQuests)
     return rv;
 }
 
+async function GetLatestBlock()
+{
+    const res = await hmy.blockchain.getBlockNumber(0);
+    const lastblock = parseInt(res.result,16);
+    console.log('lastblock:', lastblock);
+    return lastblock;
+}
+
 // ==========================================
+let prevBlock = 0;
 async function main() {
     try {
         
@@ -653,6 +662,14 @@ async function main() {
             console.log("eBreakLimit Hit!!");
             process.exit(0);
         }
+
+        let lastBlock = await GetLatestBlock();
+        if (lastBlock === prevBlock)
+        {
+            console.log("RPC Lagging..")
+            return;
+        }
+        prevBlock = lastBlock;
 
         let activeQuests = await getActiveQuests();
 
