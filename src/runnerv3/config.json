@@ -4,18 +4,18 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": [],
+            "professionHeroes": ["138693"],
             "nonProfessionHeroes": [],
-            "proMinStam": 25,
+            "proMinStam": 21,
             "normMinStam": 21,
             "contractAddress": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc"
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["127779","85100","66330","128372"],
+            "professionHeroes": ["127779","85100","66330","128372","137218","121626","140613","138420"],
             "nonProfessionHeroes": [],
-            "holdingArea": ["127779","85100","66330","128372"],
-            "proMinStam": 25,
+            "holdingArea": ["138420"],
+            "proMinStam": 21,
             "normMinStam": 21,
             "contractAddress": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4"
         },
@@ -46,8 +46,8 @@
             "name": "Gardening",
             "professionHeroes": ["120812","103763","103126"],
             "nonProfessionHeroes": [],
-            "proMinStam": 20,
-            "normMinStam": 20,
+            "proMinStam": 21,
+            "normMinStam": 21,
             "poolID": 17,
             "holdingArea": ["104208","65823","103763","103126","120812"],
             "contractAddress": "0xe4154b6e5d240507f9699c730a496790a722df19"
@@ -63,6 +63,7 @@
             "https://api.harmony.one",
             "https://harmony-0-rpc.gateway.pokt.network",
             "https://api.0xvalidator.one",
+            "https://api.s0.t.hmny.io",
             "https://a.api.s0.t.hmny.io"
         ]
     ,

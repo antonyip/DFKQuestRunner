@@ -242,6 +242,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
     let maxBatch = 6;
+    minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let proStamUsage = 5;
     let normStamUsage = 7;
     let minStam = isPro ? questType.proMinStam : questType.normMinStam;
@@ -343,7 +344,8 @@ async function CheckAndSendForagers(heroesStruct, isPro)
     }
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
-    let maxBatch = 6;
+    let maxBatch = 2;
+    minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let proStamUsage = 5;
     let normStamUsage = 7;
     let minStam = isPro ? questType.proMinStam : questType.normMinStam;
@@ -446,6 +448,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
     let maxBatch = 6;
+    minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let minStam = isPro ? questType.proMinStam : questType.normMinStam;
 
     let activeQuesters = heroesStruct.allQuesters
@@ -664,7 +667,7 @@ async function main() {
         }
 
         let lastBlock = await GetLatestBlock();
-        if (lastBlock === prevBlock)
+        if (lastBlock < prevBlock)
         {
             console.log("RPC Lagging..")
             return;
