@@ -344,7 +344,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
     }
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
-    let maxBatch = 6;
+    let maxBatch = 2;
     minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let proStamUsage = 5;
     let normStamUsage = 7;
@@ -616,6 +616,13 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     return;
 }
 
+const date = require('date-and-time');
+
+function GetCurrentDateTime()
+{
+    return date.addMinutes(new Date(Date.now()), -2);
+}
+
 function ParseActiveQuests(activeQuests)
 {
     let leadQuestersArray = [];
@@ -625,7 +632,7 @@ function ParseActiveQuests(activeQuests)
     activeQuests.forEach(element => {
         leadQuestersArray.push(element.heroes[0].toString());
         let questCompletedDate = new Date(element.completeAtTime*1000)
-        if (questCompletedDate < Date.now())
+        if (questCompletedDate < GetCurrentDateTime())
         {
             completedQuestsArray.push(element.heroes[0].toString());
             completedQuestersCountArray.push(element.heroes.length);
@@ -659,6 +666,7 @@ async function main() {
     try {
         
         console.log(" --" + new Date().toLocaleTimeString());
+        console.log(" Sim:" + GetCurrentDateTime());
         const oldLimit = eBreakCount;
         if (eBreakCount > eBreakLimit)
         {

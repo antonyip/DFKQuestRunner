@@ -3,5 +3,5 @@
 while true
 do
   node index.js
-  sleep 4800
+  sleep 1800
 done
