@@ -4,7 +4,7 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["138693"],
+            "professionHeroes": ["138693","139584"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 21,
@@ -12,7 +12,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["127779","85100","66330","128372","137218","121626","140613","138420"],
+            "professionHeroes": ["127779","85100","66330","137218","121626","140613","138420","103703"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420"],
             "proMinStam": 25,

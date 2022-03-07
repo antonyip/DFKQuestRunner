@@ -44,8 +44,9 @@ let heroContract = hmy.contracts.createContract(
         defaultGasPrice: config.gasPrice
     })
 */
-async function getActiveQuests()
+async function getActiveQuests(latestBlock)
 {
+    questContract.defaultBlock = latestBlock;
     let results = await questContract.methods.getActiveQuests(config.wallet).call()
     return results
 }
@@ -675,14 +676,15 @@ async function main() {
         }
 
         let lastBlock = await GetLatestBlock();
-        if (lastBlock < prevBlock)
+        if (lastBlock <= prevBlock)
         {
             console.log("RPC Lagging..")
             return;
         }
         prevBlock = lastBlock;
 
-        let activeQuests = await getActiveQuests();
+        // it also sets the defaultblock
+        let activeQuests = await getActiveQuests(lastBlock);
 
         let heroesStruct = ParseActiveQuests(activeQuests);
         console.log(heroesStruct);

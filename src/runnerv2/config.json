@@ -4,7 +4,7 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": [],
+            "professionHeroes": ["77012","121822"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 21,
@@ -12,7 +12,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["103703"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
             "holdingArea": ["103703"],
             "proMinStam": 25,
@@ -28,7 +28,7 @@
         {
             "name": "GoldMining",
             "professionHeroes": [],
-            "nonProfessionHeroes": ["77012","121822"],
+            "nonProfessionHeroes": [],
             "holdingArea": ["121822","77012"],
             "proMinStam": 25,
             "normMinStam": 25,
