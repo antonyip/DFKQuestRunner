@@ -4,7 +4,7 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["138693","139584"],
+            "professionHeroes": ["138693","139584","77012","121822"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 21,

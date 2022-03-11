@@ -111,7 +111,7 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to send create a fishing pattern withing heroes")
+        throw new Error("Tried to create a pattern without heroes")
         return ""
     }
 
@@ -144,7 +144,7 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to send create a fishing pattern withing heroes")
+        throw new Error("Tried to send create a pattern without heroes")
         return ""
     }
 
@@ -177,7 +177,7 @@ function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to send create a fishing pattern withing heroes")
+        throw new Error("Tried to create a pattern without heroes")
         return ""
     }
 
@@ -242,7 +242,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     }
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
-    let maxBatch = 6;
+    let maxBatch = 2;
     minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let proStamUsage = 5;
     let normStamUsage = 7;
