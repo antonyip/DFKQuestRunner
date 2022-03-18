@@ -27,7 +27,7 @@
         },
         {
             "name": "GoldMining",
-            "professionHeroes": ["125432"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
             "holdingArea": ["121822","77012"],
             "proMinStam": 25,
@@ -36,7 +36,7 @@
         },
         {
             "name": "JewelMining",
-            "professionHeroes": [],
+            "professionHeroes": ["125432","155016"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 25,

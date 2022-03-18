@@ -206,6 +206,39 @@ function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
     return rv;
 }
 
+function jewelMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
+{
+    if (hero1 === 0)
+    {
+        throw new Error("Tried to create a pattern without heroes")
+        return ""
+    }
+
+    let rv = ""
+    rv += "0xc855dea3" // start Quest
+    rv += "0000000000000000000000000000000000000000000000000000000000000060" // ?
+    rv += "0000000000000000000000006ff019415ee105acf2ac52483a33f5b43eadb8d0" // quest
+    let heroCount = 0;
+    if (hero1 > 0) { ++heroCount; }
+    if (hero2 > 0) { ++heroCount; }
+    if (hero3 > 0) { ++heroCount; }
+    if (hero4 > 0) { ++heroCount; }
+    if (hero5 > 0) { ++heroCount; }
+    if (hero6 > 0) { ++heroCount; }
+
+    rv += intToInput(1); // attempts
+    rv += intToInput(heroCount); // hero count
+
+    if (hero1 > 0) { rv += intToInput(hero1); }
+    if (hero2 > 0) { rv += intToInput(hero2); }
+    if (hero3 > 0) { rv += intToInput(hero3); }
+    if (hero4 > 0) { rv += intToInput(hero4); }
+    if (hero5 > 0) { rv += intToInput(hero5); }
+    if (hero6 > 0) { rv += intToInput(hero6); }
+
+    return rv;
+}
+
 function gardeningQuestPattern(heroIdInt, poolIdInt) {
 
     let rv = ""
@@ -448,7 +481,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     }
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
-    let maxBatch = 6;
+    let maxBatch = 1;
     minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let minStam = isPro ? questType.proMinStam : questType.normMinStam;
 
@@ -534,6 +567,107 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         }
         
         console.log("Sent " + LocalBatching + " on a Gold Mining Quest")
+    }
+    
+    return;
+}
+
+async function CheckAndSendJewelMiners(heroesStruct, isPro)
+{
+    // too lazy to change struct in config
+    let questType = config.quests[4]
+    if (questType.name !== "JewelMining")
+    {
+        throw new Error("JewelMining config index was changed");
+    }
+
+    let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
+    let maxBatch = 1;
+    minBatch = minBatch > maxBatch ? maxBatch : minBatch;
+    let minStam = isPro ? questType.proMinStam : questType.normMinStam;
+
+    let activeQuesters = heroesStruct.allQuesters
+    let configJewelMiners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
+    //console.log(activeQuesters);
+    //console.log(configForagers);
+    let possibleJewelMiners = configJewelMiners.filter((e) => {
+        return (activeQuesters.indexOf(e) < 0);
+      });
+
+    let JewelMinerPromises = []
+    possibleJewelMiners.forEach(fisher => {
+        JewelMinerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+    });
+
+    let staminaValues = await Promise.all(JewelMinerPromises)
+
+    
+    // Batching heroes. we only take 6. -> next iteration then we go again
+    LocalBatching = []
+    for (let index = 0; index < possibleJewelMiners.length; index++) {
+        const stam = staminaValues[index];
+        if ( stam >= minStam )
+        {
+            LocalBatching.push(possibleJewelMiners[index]);
+        }
+
+        // list full
+        if (LocalBatching.length === maxBatch)
+        {
+            break;
+        }
+    }
+
+    let numHeroesToSend = LocalBatching.length;
+
+    // fill the last batch up
+    if (LocalBatching.length > 0)
+    {
+        while(LocalBatching.length < maxBatch)
+        {
+            LocalBatching.push(0)
+        }
+    }
+
+    console.log("Jewel Miner Batches" + (isPro ? " (P): " : " (N): ") + LocalBatching)
+
+    // be lazy only send 1 batch for now.. next minute can send another
+    
+    if (numHeroesToSend >= minBatch && minBatch > 0)
+    {
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5]) })
+
+        const txn = hmy.transactions.newTx({
+            to: config.questContract,
+            value: new Unit(0).asOne().toWei(),
+            // gas limit, you can use string
+            gasLimit: config.gasLimit,
+            // send token from shardID
+            shardID: 0,
+            // send token to toShardID
+            toShardID: 0,
+            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            // tx data
+            data: jewelMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5])
+        });
+          
+        
+        // sign the transaction use wallet;
+        const signedTxn = await hmy.wallet.signTransaction(txn);
+        //  console.log(signedTxn);
+        if (GlobalSignOn === true)
+        {
+            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            console.log("!!! sending the message on the wire !!!");
+            ++eBreakCount;
+            //  console.log(txnHash);
+        }
+        
+        console.log("Sent " + LocalBatching + " on a Jewel Mining Quest")
     }
     
     return;
@@ -697,6 +831,8 @@ async function main() {
         await CheckAndSendForagers(heroesStruct, true);
         await CheckAndSendGoldMiners(heroesStruct, false);
         await CheckAndSendGoldMiners(heroesStruct, true);
+        await CheckAndSendJewelMiners(heroesStruct, false);
+        await CheckAndSendJewelMiners(heroesStruct, true);
         await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
 
