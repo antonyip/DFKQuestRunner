@@ -847,6 +847,10 @@ async function main() {
     }
     catch(error)
     {
+        if (error.toString().includes('Maximum call stack size exceeded'))
+        {
+            process.exit(0);
+        }
         eBreakCount += 1;
         autils.log(error);
     }

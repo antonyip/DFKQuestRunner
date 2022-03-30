@@ -27,7 +27,7 @@
         },
         {
             "name": "GoldMining",
-            "professionHeroes": [],
+            "professionHeroes": ["163261","163379"],
             "nonProfessionHeroes": [],
             "holdingArea": ["121822","77012"],
             "proMinStam": 25,
@@ -63,6 +63,8 @@
             "https://api.harmony.one",
             "https://harmony-0-rpc.gateway.pokt.network",
             "https://api.0xvalidator.one",
+            "https://rpc.hermesdefi.io/",
+            "https://api.fuzz.fi/",
             "https://api.s0.t.hmny.io",
             "https://a.api.s0.t.hmny.io"
         ]
