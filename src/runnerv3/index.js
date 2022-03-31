@@ -534,12 +534,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     
     if (numHeroesToSend >= minBatch && minBatch > 0)
     {
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5]) })
-
-        const txn = hmy.transactions.newTx({
+         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
@@ -635,11 +630,6 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
     
     if (numHeroesToSend >= minBatch && minBatch > 0)
     {
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5]) })
-
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
