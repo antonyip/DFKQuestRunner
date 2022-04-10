@@ -111,7 +111,7 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to create a pattern without heroes")
+        throw new Error("Tried to send create a fishing pattern without heroes")
         return ""
     }
 
@@ -144,7 +144,7 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to send create a pattern without heroes")
+        throw new Error("Tried to send create a foraging pattern without heroes")
         return ""
     }
 
@@ -177,7 +177,7 @@ function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to create a pattern without heroes")
+        throw new Error("Tried to send create a gold mining pattern without heroes")
         return ""
     }
 
@@ -210,7 +210,7 @@ function jewelMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
 {
     if (hero1 === 0)
     {
-        throw new Error("Tried to create a pattern without heroes")
+        throw new Error("Tried to create a jewel mining pattern without heroes")
         return ""
     }
 
