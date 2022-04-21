@@ -13,7 +13,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["127779","66330","85100","137218","121626","140613","138420","103703"],
+            "professionHeroes": ["66330","140613","137218"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420","85100"],
             "proMinStam": 25,
@@ -28,7 +28,7 @@
         },
         {
             "name": "GoldMining",
-            "professionHeroes": ["163379","163261"],
+            "professionHeroes": ["163261"],
             "nonProfessionHeroes": [],
             "holdingArea": ["121822"],
             "proMinStam": 25,
@@ -37,7 +37,7 @@
         },
         {
             "name": "JewelMining",
-            "professionHeroes": ["125432","155016"],
+            "professionHeroes": ["125432","155016","163379"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 25,
@@ -57,7 +57,7 @@
     "statQuests": [
     {
         "name": "StatQuest_Str",
-        "heroes": ["121822"],
+        "heroes": ["121822","127779"],
         "normMinStam": 25
     },
     {
@@ -67,7 +67,7 @@
     },
     {
         "name": "StatQuest_Agi",
-        "heroes": [],
+        "heroes": ["85100"],
         "normMinStam": 25
     },
     {
@@ -87,7 +87,7 @@
     },
     {
         "name": "StatQuest_Wis",
-        "heroes": ["139584"],
+        "heroes": ["139584","121626","138420","103703"],
         "normMinStam": 25
     },
     {
