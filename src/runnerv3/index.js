@@ -135,7 +135,7 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero6 > 0) { ++heroCount; }
 
     rv += intToInput(attempts); // attempts
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // blankspace?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // level
     rv += intToInput(heroCount); // hero count
 
     if (hero1 > 0) { rv += intToInput(hero1); }
@@ -169,7 +169,7 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero6 > 0) { ++heroCount; }
 
     rv += intToInput(attempts); // attempts
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // blank space?
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // level
     rv += intToInput(heroCount); // hero count
 
     if (hero1 > 0) { rv += intToInput(hero1); }
@@ -832,10 +832,10 @@ async function main() {
         await CompleteQuests(heroesStruct, config.questContract);
         await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
 
-        //await CheckAndSendFishers(heroesStruct2, false);
-        //await CheckAndSendFishers(heroesStruct2, true);
-        //await CheckAndSendForagers(heroesStruct2, false);
-        //await CheckAndSendForagers(heroesStruct2, true);
+        await CheckAndSendFishers(heroesStruct2, false);
+        await CheckAndSendFishers(heroesStruct2, true);
+        await CheckAndSendForagers(heroesStruct2, false);
+        await CheckAndSendForagers(heroesStruct2, true);
 
         await CheckAndSendGoldMiners(heroesStruct, false);
         await CheckAndSendGoldMiners(heroesStruct, true);
