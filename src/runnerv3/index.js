@@ -72,7 +72,7 @@ function completeQuestPattern(heroID)
 {
     let rv = ""
     rv += "0x528be0a9" // Complete Quest
-    rv += intToInput(heroID) // ?
+    rv += autils.intToInput(heroID) // ?
     return rv
 }
 
@@ -111,11 +111,6 @@ async function CompleteQuests(heroesStruct, _questContract)
     return;
 }
 
-function intToInput(myint)
-{
-    return numberToHex(myint).substring(2).padStart(64,"0");
-}
-
 function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
 {
     if (hero1 === 0)
@@ -136,16 +131,16 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(attempts); // attempts
+    rv += autils.intToInput(attempts); // attempts
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // level
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -170,16 +165,16 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(attempts); // attempts
+    rv += autils.intToInput(attempts); // attempts
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // level
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -204,15 +199,15 @@ function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(1); // attempts
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(1); // attempts
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -237,15 +232,15 @@ function jewelMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(1); // attempts
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(1); // attempts
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -259,8 +254,8 @@ function gardeningQuestPattern(heroIdInt, poolIdInt) {
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // attempts
     rv += "00000000000000000000000000000000000000000000000000000000000000c0" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // ? 
-    rv += intToInput(heroIdInt) // heroid
-    rv += intToInput(poolIdInt) // poolid (0x0 = one-jewel, 0x11=luna-jewel)
+    rv += autils.intToInput(heroIdInt) // heroid
+    rv += autils.intToInput(poolIdInt) // poolid (0x0 = one-jewel, 0x11=luna-jewel)
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
@@ -846,7 +841,7 @@ async function main() {
         await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
 
-        await CheckAndSendStatQuests(heroesStruct2);
+        eBreakCount += await CheckAndSendStatQuests(heroesStruct2);
 
         if (oldLimit === eBreakCount)
         {

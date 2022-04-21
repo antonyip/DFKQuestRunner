@@ -40,7 +40,7 @@ let questContract_21Apr2022 = hmy.contracts.createContract(
         defaultGasPrice: config.gasPrice
     });
 
-const GlobalSignOn = true;
+const LocalSignOn = true;
 
 exports.CheckAndSendStatQuests = async (heroesStruct) => {
 
@@ -113,13 +113,13 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
                 // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
                 gasPrice: config.gasPrice,
                 // tx data
-                data: statQuestPattern(LocalBatching[0], questType.name, 5)
+                data: statQuestPattern(LocalBatching[0], questType.name, minStam / 5)
             });
 
 
             // sign the transaction use wallet;
             const signedTxn = await hmy.wallet.signTransaction(txn);
-            if (GlobalSignOn === true)
+            if (LocalSignOn === true)
             {
                 const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
                 console.log("!!! sending the message on the wire !!!");
@@ -151,17 +151,17 @@ const statQuestPattern = (hero, stat, attempts) => {
     // if (hero5 > 0) { ++heroCount; }
     // if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(attempts); // attempts
+    rv += autils.intToInput(attempts); // attempts
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // level
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero > 0) { rv += intToInput(hero); }
-    // if (hero1 > 0) { rv += intToInput(hero1); }
-    // if (hero2 > 0) { rv += intToInput(hero2); }
-    // if (hero3 > 0) { rv += intToInput(hero3); }
-    // if (hero4 > 0) { rv += intToInput(hero4); }
-    // if (hero5 > 0) { rv += intToInput(hero5); }
-    // if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero > 0) { rv += autils.intToInput(hero); }
+    // if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    // if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    // if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    // if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    // if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    // if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }

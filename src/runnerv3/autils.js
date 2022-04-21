@@ -28,3 +28,8 @@ module.exports.log = function log(mystring, isError)
     }
     
 }
+
+module.exports.intToInput = function intToInput(myint)
+{
+    return parseInt(myint).toString(16).padStart(64,"0");
+}
