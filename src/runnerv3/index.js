@@ -116,9 +116,9 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     }
 
     let rv = ""
-    rv += "0xc855dea3" // start Quest
-    rv += "0000000000000000000000000000000000000000000000000000000000000060" // ?
-    rv += "000000000000000000000000e259e8386d38467f0e7ffedb69c3c9c935dfaefc" // quest
+    rv += "0x8a2da17b" // start Quest
+    rv += "0000000000000000000000000000000000000000000000000000000000000080" // version i think
+    rv += "000000000000000000000000adffd2a255b3792873a986895c6312e8fbacfc8b" // quest
     let heroCount = 0;
     if (hero1 > 0) { ++heroCount; }
     if (hero2 > 0) { ++heroCount; }
@@ -128,6 +128,7 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero6 > 0) { ++heroCount; }
 
     rv += intToInput(attempts); // attempts
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // blankspace?
     rv += intToInput(heroCount); // hero count
 
     if (hero1 > 0) { rv += intToInput(hero1); }
@@ -149,9 +150,9 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     }
 
     let rv = ""
-    rv += "0xc855dea3" // start Quest
-    rv += "0000000000000000000000000000000000000000000000000000000000000060" // ?
-    rv += "0000000000000000000000003132c76acf2217646fb8391918d28a16bd8a8ef4" // quest
+    rv += "0x8a2da17b" // start Quest
+    rv += "0000000000000000000000000000000000000000000000000000000000000080" // version
+    rv += "000000000000000000000000b465f4590095dad50fee6ee0b7c6700ac2b04df8" // quest
     let heroCount = 0;
     if (hero1 > 0) { ++heroCount; }
     if (hero2 > 0) { ++heroCount; }
@@ -161,6 +162,7 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero6 > 0) { ++heroCount; }
 
     rv += intToInput(attempts); // attempts
+    rv += "0000000000000000000000000000000000000000000000000000000000000000" // blank space?
     rv += intToInput(heroCount); // hero count
 
     if (hero1 > 0) { rv += intToInput(hero1); }

@@ -27,7 +27,7 @@
         },
         {
             "name": "GoldMining",
-            "professionHeroes": [],
+            "professionHeroes": ["163379","163261"],
             "nonProfessionHeroes": [],
             "holdingArea": ["121822"],
             "proMinStam": 25,

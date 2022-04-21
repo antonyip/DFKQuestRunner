@@ -1,61 +1,54 @@
-const { Harmony } = require('@harmony-js/core');
+//const {Harmony} = require("@harmony-js/core");
+
 const {
-    ChainID,
-    ChainType,
-    hexToNumber,
     numberToHex,
-    fromWei,
-    Units,
     Unit,
-  } = require('@harmony-js/utils');
+} = require('@harmony-js/utils');
 
 const config = require("./config.json");
 const rewardLookup = require("./rewards.json");
 const autils = require("./autils")
 const abi = require("./abi.json")
-const GlobalSignOn = true;
+const GlobalSignOn = false;
 
 let eBreakCount = 0;
 const eBreakLimit = 5;
 
-const hmy = new Harmony(
-    autils.getRpc(config.useRpcIndex),
-    {
-        chainType: ChainType.Harmony,
-        chainId: ChainID.HmyMainnet,
-    },
-);
 
-hmy.wallet.addByPrivateKey(process.env.ETH_PRIVATE_KEY);
+// const hmy = new Harmony(
+    // autils.getRpc(config.useRpcIndex),
+    // {
+        // chainType: ChainType.Harmony,
+        // chainId: ChainID.HmyMainnet,
+    // },
+// );
 
-let questContract = hmy.contracts.createContract(
-    abi,
-    config.questContract,   
-    {
-        defaultGas: config.gasLimit,
-        defaultGasPrice: config.gasPrice
-    })
-/*
-let heroContract = hmy.contracts.createContract(
-    abi,
-    config.heroContract,   
-    {
-        defaultGas: config.gasLimit,
-        defaultGasPrice: config.gasPrice
-    })
-*/
+
+const ethers = require('ethers');
+
+const hmy2Network = new ethers.providers.JsonRpcProvider(autils.getRpc(config.useRpcIndex));
+console.log(hmy2Network.connection)
+
+const hmy2Wallet = new ethers.Wallet(process.env.ETH_PRIVATE_KEY, hmy2Network);
+console.log(hmy2Wallet.address);
+
+const hmy2Txs = new ethers.UnsignedTransaction();
+
+let questContractV2 = new ethers.Contract(config.questContract, abi, hmy2Network);
+let heroContractV2 = new ethers.Contract(config.heroContract, abi, hmy2Network);
+
 async function getActiveQuests(latestBlock)
 {
-    questContract.defaultBlock = latestBlock;
-    let results = await questContract.methods.getActiveQuests(config.wallet).call()
-    return results
+    questContractV2.defaultBlock = latestBlock;
+    let results = await questContractV2.functions.getActiveQuests(config.wallet)
+    return results[0]
 }
 
 function completeQuestPattern(heroID)
 {
     let rv = ""
     rv += "0x528be0a9" // Complete Quest
-    rv += intToInput(heroID) // ?
+    rv += intToInput(heroID) // Hero ID
     return rv
 }
 
@@ -64,16 +57,10 @@ async function CompleteQuests(heroesStruct)
     if (heroesStruct.completedQuesters.length > 0)
     {
         const completedHeroId = heroesStruct.completedQuesters[0];
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     from: config.wallet,
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: completeQuestPattern(completedHeroId)
-        // })
-
+        hmy2
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -295,7 +282,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 
     let FisherPromises = []
     possibleFishers.forEach(fisher => {
-        FisherPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+        FisherPromises.push(questContractV2.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(FisherPromises)
@@ -339,7 +326,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -397,7 +384,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
     let ForagerPromises = []
     possibleForagers.forEach(hero => {
-        ForagerPromises.push(questContract.methods.getCurrentStamina(hero).call())
+        ForagerPromises.push(questContractV2.methods.getCurrentStamina(hero))
     });
 
     let staminaValues = await Promise.all(ForagerPromises)
@@ -442,7 +429,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -495,7 +482,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
     let GoldMinerPromises = []
     possibleGoldMiners.forEach(fisher => {
-        GoldMinerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+        GoldMinerPromises.push(questContractV2.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(GoldMinerPromises)
@@ -536,7 +523,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     {
          const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -591,7 +578,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
 
     let JewelMinerPromises = []
     possibleJewelMiners.forEach(fisher => {
-        JewelMinerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+        JewelMinerPromises.push(questContractV2.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(JewelMinerPromises)
@@ -632,7 +619,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -685,7 +672,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     let GardenerPromises = []
     possibleGardeners.forEach(fisher => {
-        GardenerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+        GardenerPromises.push(questContractV2.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(GardenerPromises)
@@ -703,15 +690,9 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     if (LocalBatching.length > 0)
     {
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
-        // })
-        
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -754,6 +735,7 @@ function ParseActiveQuests(activeQuests)
     let allQuestersArray = [];
     let completedQuestsArray = [];
     let completedQuestersCountArray = []
+    console.log(activeQuests);
     activeQuests.forEach(element => {
         leadQuestersArray.push(element.heroes[0].toString());
         let questCompletedDate = new Date(element.completeAtTime*1000)
@@ -779,8 +761,8 @@ function ParseActiveQuests(activeQuests)
 
 async function GetLatestBlock()
 {
-    const res = await hmy.blockchain.getBlockNumber(0);
-    const lastblock = parseInt(res.result,16);
+    const res = await hmy2Network.getBlockNumber();
+    const lastblock = parseInt(res,10);
     console.log('lastblock:', lastblock);
     return lastblock;
 }
@@ -791,7 +773,7 @@ async function main() {
     try {
         
         console.log(" --" + new Date().toLocaleTimeString());
-        console.log(" Sim:" + GetCurrentDateTime());
+        console.log(" Sim:" + GetCurrentDateTime().toLocaleTimeString());
         const oldLimit = eBreakCount;
         if (eBreakCount > eBreakLimit)
         {
@@ -848,4 +830,4 @@ async function main() {
 
 autils.log("hello world");
 main()
-setInterval(main, config.pollingInterval*1000);
+//setInterval(main, config.pollingInterval*1000);

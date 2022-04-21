@@ -1,11 +1,13 @@
 {
     "wallet": "0xcD4fd2AEFC7fad24266aa1da67f99Ed465A69656",
+    "walletz": "0x0Ba43bAe4613E03492e4C17Af3B014B6c3202B9d",
     "pollingInterval": "60",
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["77012","121822"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
+            "holdingArea": ["121822","77012"],
             "proMinStam": 25,
             "normMinStam": 21,
             "contractAddress": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc"
