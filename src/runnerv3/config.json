@@ -4,7 +4,7 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["138693","139584","121822"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
             "holding": ["77012","121822"],
             "proMinStam": 25,
@@ -57,7 +57,7 @@
     "statQuests": [
     {
         "name": "StatQuest_Str",
-        "heroes": [],
+        "heroes": ["121822"],
         "normMinStam": 25
     },
     {
@@ -82,12 +82,12 @@
     },
     {
         "name": "StatQuest_Int",
-        "heroes": [],
+        "heroes": ["138693"],
         "normMinStam": 25
     },
     {
         "name": "StatQuest_Wis",
-        "heroes": [],
+        "heroes": ["139584"],
         "normMinStam": 25
     },
     {
