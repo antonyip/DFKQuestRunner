@@ -340,7 +340,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
         //     data: fishingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],fishingTries) })
 
         const txn = hmy.transactions.newTx({
-            to: config.questContract,
+            to: config.questContract_21Apr2022,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
             gasLimit: config.gasLimit,
@@ -443,7 +443,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
         //     data: foragingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],foragingTries) })
 
         const txn = hmy.transactions.newTx({
-            to: config.questContract,
+            to: config.questContract_21Apr2022,
             value: new Unit(0).asOne().toWei(),
             // gas limit, you can use string
             gasLimit: config.gasLimit,

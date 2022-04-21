@@ -51,10 +51,17 @@
             "poolID": 8,
             "holdingArea": ["104208","65823","103763","103126","120812"],
             "contractAddress": "0xe4154b6e5d240507f9699c730a496790a722df19"
+        },
+        {
+            "name": "StatQuest_Str",
+            "heroes": [],
+            "normMinStam": 25,
+            "contractAddress": "0xf60AF3a32Bb94e395E17C70aB695d968F37Bd2e4"
         }
     ],
 
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
+    "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",
     "heroContract": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c",
 
     "useRpcIndex": 1,
@@ -63,10 +70,16 @@
             "https://api.harmony.one",
             "https://harmony-0-rpc.gateway.pokt.network",
             "https://api.0xvalidator.one",
-            "https://rpc.hermesdefi.io/",
-            "https://api.fuzz.fi/",
+            "https://rpc.hermesdefi.io",
+            "https://api.fuzz.fi",
             "https://api.s0.t.hmny.io",
-            "https://a.api.s0.t.hmny.io"
+            "https://a.api.s0.t.hmny.io",
+            "https://rpc.foxswap.fi",
+            "https://iad.api.harmony.one",
+            "https://rpc.heavenswail.one",
+            "https://rpc.hermesdefi.io",
+            "https://rpc.cosmicuniverse.one",
+            "https://rpc.onechain.services"
         ]
     ,
 
