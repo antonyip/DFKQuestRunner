@@ -16,8 +16,6 @@ const abi = require("./abi.json")
 const questABI_21apr2022 = require('./questABI_21apr2022.json')
 const GlobalSignOn = true;
 
-const { CheckAndSendStatQuests } = require('./statQuest');
-
 let eBreakCount = 0;
 const eBreakLimit = 5;
 
@@ -643,7 +641,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -688,8 +686,6 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     let activeQuesters = heroesStruct.allQuesters
     let configGardeners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
     let liquidityPoolID = questType.poolID;
-    //console.log(activeQuesters);
-    //console.log(configForagers);
     let possibleGardeners = configGardeners.filter((e) => {
         return (activeQuesters.indexOf(e) < 0);
       });
@@ -714,12 +710,6 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     if (LocalBatching.length > 0)
     {
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
-        // })
-        
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: new Unit(0).asOne().toWei(),
@@ -756,7 +746,7 @@ const date = require('date-and-time');
 
 function GetCurrentDateTime()
 {
-    return date.addMinutes(new Date(Date.now()), -1);
+    return date.addMinutes(new Date(Date.now()), -2);
 }
 
 function ParseActiveQuests(activeQuests)
@@ -766,7 +756,7 @@ function ParseActiveQuests(activeQuests)
     let completedQuestsArray = [];
     let completedQuestersCountArray = []
     activeQuests.forEach(element => {
-        if (element.id.toString() !== "16305")
+        if (element.heroes[0].toString() !== '85100')
         {
             leadQuestersArray.push(element.heroes[0].toString());
             let questCompletedDate = new Date(element.completeAtTime*1000)
@@ -846,8 +836,6 @@ async function main() {
         await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
 
-        await CheckAndSendStatQuests(heroesStruct2);
-
         if (oldLimit === eBreakCount)
         {
             eBreakCount = 0;
@@ -873,30 +861,39 @@ async function testingFunc()
     //console.log( result );
     //const quests = ParseActiveQuests(result);
     //CompleteQuests(quests)
-        const txn = hmy.transactions.newTx({
-            to: config.questContract_21Apr2022,
-            value: 0,
-            // gas limit, you can use string
-            gasLimit: config.gasLimit,
-            // send token from shardID
-            shardID: 0,
-            // send token to toShardID
-            toShardID: 0,
-            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: config.gasPrice,
-            // tx data
-            data: "0x2e0703dc"
-        });
-          
+        // const txn = hmy.transactions.newTx({
+        //     to: config.questContract_21Apr2022,
+        //     value: 0,
+        //     // gas limit, you can use string
+        //     gasLimit: config.gasLimit,
+        //     // send token from shardID
+        //     shardID: 0,
+        //     // send token to toShardID
+        //     toShardID: 0,
+        //     // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+        //     gasPrice: config.gasPrice,
+        //     // tx data
+        //     data: "0x2e0703dc"
+        // });
+        //const txn = questContract_21Apr2022.
+        // try {
+        // const rv = await questContract.methods.completeQuest(85100).send({});
+        // console.log(rv);
+        // } catch (ex)
+        // {
+        //     console.log(ex);
+        // }
         // sign the transaction use wallet;
-        const signedTxn = await hmy.wallet.signTransaction(txn);
-        console.log(signedTxn);
-        const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-        console.log(txnHash);
+        //const signedTxn = await hmy.wallet.signTransaction(txn);
+        //console.log(signedTxn);
+        //const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+        //console.log(txnHash);
+        let activeQuests2 = await getActiveAccountQuests(1);
+        console.log(JSON.stringify(activeQuests2))
         return;
 }
 
 autils.log("hello world");
-//testingFunc()
-main()
-setInterval(main, config.pollingInterval*1000);
+testingFunc();
+//main()
+//setInterval(main, config.pollingInterval*1000);

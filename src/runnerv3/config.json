@@ -4,17 +4,18 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["138693","139584","77012","121822"],
+            "professionHeroes": ["138693","139584","121822"],
             "nonProfessionHeroes": [],
+            "holding": ["77012","121822"],
             "proMinStam": 25,
             "normMinStam": 21,
             "contractAddress": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc"
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["127779","85100","66330","137218","121626","140613","138420","103703"],
+            "professionHeroes": ["127779","66330","85100","137218","121626","140613","138420","103703"],
             "nonProfessionHeroes": [],
-            "holdingArea": ["138420"],
+            "holdingArea": ["138420","85100"],
             "proMinStam": 25,
             "normMinStam": 21,
             "contractAddress": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4"
@@ -51,14 +52,49 @@
             "poolID": 8,
             "holdingArea": ["104208","65823","103763","103126","120812"],
             "contractAddress": "0xe4154b6e5d240507f9699c730a496790a722df19"
-        },
-        {
-            "name": "StatQuest_Str",
-            "heroes": [],
-            "normMinStam": 25,
-            "contractAddress": "0xf60AF3a32Bb94e395E17C70aB695d968F37Bd2e4"
-        }
+        }        
     ],
+    "statQuests": [
+    {
+        "name": "StatQuest_Str",
+        "heroes": [],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_Dex",
+        "heroes": [],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_Agi",
+        "heroes": [],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_Vit",
+        "heroes": ["77012"],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_End",
+        "heroes": [],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_Int",
+        "heroes": [],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_Wis",
+        "heroes": [],
+        "normMinStam": 25
+    },
+    {
+        "name": "StatQuest_Luk",
+        "heroes": [],
+        "normMinStam": 25
+    }],
 
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",
