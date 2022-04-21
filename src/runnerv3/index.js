@@ -13,6 +13,7 @@ const config = require("./config.json");
 const rewardLookup = require("./rewards.json");
 const autils = require("./autils")
 const abi = require("./abi.json")
+const questABI_21apr2022 = require('./questABI_21apr2022.json')
 const GlobalSignOn = true;
 
 let eBreakCount = 0;
@@ -34,7 +35,14 @@ let questContract = hmy.contracts.createContract(
     {
         defaultGas: config.gasLimit,
         defaultGasPrice: config.gasPrice
-    })
+    });
+let questContract_21Apr2022 = hmy.contracts.createContract(
+    questABI_21apr2022,
+    config.questContract_21Apr2022,   
+    {
+        defaultGas: config.gasLimit,
+        defaultGasPrice: config.gasPrice
+    });
 /*
 let heroContract = hmy.contracts.createContract(
     abi,
@@ -51,6 +59,13 @@ async function getActiveQuests(latestBlock)
     return results
 }
 
+async function getActiveAccountQuests(latestBlock)
+{
+    let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call()
+    return results
+}
+
+
 function completeQuestPattern(heroID)
 {
     let rv = ""
@@ -59,21 +74,14 @@ function completeQuestPattern(heroID)
     return rv
 }
 
-async function CompleteQuests(heroesStruct)
+async function CompleteQuests(heroesStruct, _questContract)
 {
     if (heroesStruct.completedQuesters.length > 0)
     {
         const completedHeroId = heroesStruct.completedQuesters[0];
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     from: config.wallet,
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: completeQuestPattern(completedHeroId)
-        // })
-
         const txn = hmy.transactions.newTx({
-            to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            to: _questContract,
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -81,7 +89,7 @@ async function CompleteQuests(heroesStruct)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: completeQuestPattern(completedHeroId)
         });
@@ -98,7 +106,6 @@ async function CompleteQuests(heroesStruct)
             
         }
     }
-
     return;
 }
 
@@ -277,7 +284,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
     }
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
-    let maxBatch = 2;
+    let maxBatch = 1;
     minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let proStamUsage = 5;
     let normStamUsage = 7;
@@ -349,7 +356,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: fishingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],fishingTries)
         });
@@ -380,7 +387,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
     }
 
     let minBatch = isPro ? questType.professionHeroes.length : questType.nonProfessionHeroes.length;
-    let maxBatch = 2;
+    let maxBatch = 1;
     minBatch = minBatch > maxBatch ? maxBatch : minBatch;
     let proStamUsage = 5;
     let normStamUsage = 7;
@@ -757,17 +764,20 @@ function ParseActiveQuests(activeQuests)
     let completedQuestsArray = [];
     let completedQuestersCountArray = []
     activeQuests.forEach(element => {
-        leadQuestersArray.push(element.heroes[0].toString());
-        let questCompletedDate = new Date(element.completeAtTime*1000)
-        if (questCompletedDate < GetCurrentDateTime())
+        if (element.heroes[0].toString() !== '85100')
         {
-            completedQuestsArray.push(element.heroes[0].toString());
-            completedQuestersCountArray.push(element.heroes.length);
+            leadQuestersArray.push(element.heroes[0].toString());
+            let questCompletedDate = new Date(element.completeAtTime*1000)
+            if (questCompletedDate < GetCurrentDateTime())
+            {
+                completedQuestsArray.push(element.heroes[0].toString());
+                completedQuestersCountArray.push(element.heroes.length);
+            }
+            autils.log(element.heroes[0].toString() + " Questing till: " +  questCompletedDate.toLocaleTimeString())
+            element.heroes.forEach(hero => {
+                allQuestersArray.push(hero.toString());
+            })
         }
-        autils.log(element.heroes[0].toString() + " Questing till: " +  questCompletedDate.toLocaleTimeString())
-        element.heroes.forEach(hero => {
-            allQuestersArray.push(hero.toString());
-        })
     });
 
     let rv = {
@@ -811,16 +821,22 @@ async function main() {
 
         // it also sets the defaultblock
         let activeQuests = await getActiveQuests(lastBlock);
+        let activeQuests2 = await getActiveAccountQuests(lastBlock);
 
         let heroesStruct = ParseActiveQuests(activeQuests);
+        let heroesStruct2 = ParseActiveQuests(activeQuests2);
+        
         console.log(heroesStruct);
+        console.log(heroesStruct2);
 
-        await CompleteQuests(heroesStruct);
+        await CompleteQuests(heroesStruct, config.questContract);
+        await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
 
-        await CheckAndSendFishers(heroesStruct, false);
-        await CheckAndSendFishers(heroesStruct, true);
-        await CheckAndSendForagers(heroesStruct, false);
-        await CheckAndSendForagers(heroesStruct, true);
+        //await CheckAndSendFishers(heroesStruct2, false);
+        //await CheckAndSendFishers(heroesStruct2, true);
+        //await CheckAndSendForagers(heroesStruct2, false);
+        //await CheckAndSendForagers(heroesStruct2, true);
+
         await CheckAndSendGoldMiners(heroesStruct, false);
         await CheckAndSendGoldMiners(heroesStruct, true);
         await CheckAndSendJewelMiners(heroesStruct, false);
@@ -834,8 +850,6 @@ async function main() {
         }
 
         console.log("runok!");
-        console.log(" ");
-
     }
     catch(error)
     {
@@ -848,6 +862,37 @@ async function main() {
     }
 }
 
+async function testingFunc()
+{
+    //const result = await getActiveAccountQuests(0);
+    //const result = await getActiveQuests(0);
+    //console.log( result );
+    //const quests = ParseActiveQuests(result);
+    //CompleteQuests(quests)
+        const txn = hmy.transactions.newTx({
+            to: config.questContract_21Apr2022,
+            value: 0,
+            // gas limit, you can use string
+            gasLimit: config.gasLimit,
+            // send token from shardID
+            shardID: 0,
+            // send token to toShardID
+            toShardID: 0,
+            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+            gasPrice: config.gasPrice,
+            // tx data
+            data: "0x2e0703dc"
+        });
+          
+        // sign the transaction use wallet;
+        const signedTxn = await hmy.wallet.signTransaction(txn);
+        console.log(signedTxn);
+        const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+        console.log(txnHash);
+        return;
+}
+
 autils.log("hello world");
+//testingFunc()
 main()
 setInterval(main, config.pollingInterval*1000);
