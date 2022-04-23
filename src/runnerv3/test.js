@@ -2,21 +2,19 @@ const { Harmony } = require('@harmony-js/core');
 const {
     ChainID,
     ChainType,
-    hexToNumber,
-    numberToHex,
-    fromWei,
-    Units,
-    Unit,
-  } = require('@harmony-js/utils');
+} = require('@harmony-js/utils');
 
 const config = require("./config.json");
 const autils = require("./autils")
-const abi = require("./abi.json")
-const questABI_21apr2022 = require('./questABI_21apr2022.json')
+const abi = require("./abi/abi.json")
+const questABI_21apr2022 = require('./abi/questABI_21apr2022.json')
 const GlobalSignOn = true;
 
+const { CheckAndSendStatQuests } = require('./quest_stats');
+const { CompleteQuests } = require('./quest_complete');
+
 let eBreakCount = 0;
-const eBreakLimit = 5;
+const eBreakLimit = 10;
 
 const hmy = new Harmony(
     autils.getRpc(config.useRpcIndex),
@@ -64,55 +62,6 @@ async function getActiveAccountQuests(latestBlock)
     return results
 }
 
-
-function completeQuestPattern(heroID)
-{
-    let rv = ""
-    rv += "0x528be0a9" // Complete Quest
-    rv += intToInput(heroID) // ?
-    return rv
-}
-
-async function CompleteQuests(heroesStruct, _questContract)
-{
-    if (heroesStruct.completedQuesters.length > 0)
-    {
-        const completedHeroId = heroesStruct.completedQuesters[0];
-        const txn = hmy.transactions.newTx({
-            to: _questContract,
-            value: 0,
-            // gas limit, you can use string
-            gasLimit: config.gasLimit,
-            // send token from shardID
-            shardID: 0,
-            // send token to toShardID
-            toShardID: 0,
-            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: config.gasPrice,
-            // tx data
-            data: completeQuestPattern(completedHeroId)
-        });
-          
-        // sign the transaction use wallet;
-        const signedTxn = await hmy.wallet.signTransaction(txn);
-        //  console.log(signedTxn);
-        if (GlobalSignOn === true)
-        {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-            console.log("!!! sending the message on the wire !!!");
-            ++eBreakCount;
-            console.log("Completed Quest for heroid:" + completedHeroId);
-            
-        }
-    }
-    return;
-}
-
-function intToInput(myint)
-{
-    return numberToHex(myint).substring(2).padStart(64,"0");
-}
-
 function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
 {
     if (hero1 === 0)
@@ -133,16 +82,16 @@ function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(attempts); // attempts
+    rv += autils.intToInput(attempts); // attempts
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // level
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -167,16 +116,16 @@ function foragingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(attempts); // attempts
+    rv += autils.intToInput(attempts); // attempts
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // level
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -201,15 +150,15 @@ function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(1); // attempts
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(1); // attempts
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -234,15 +183,15 @@ function jewelMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
     if (hero5 > 0) { ++heroCount; }
     if (hero6 > 0) { ++heroCount; }
 
-    rv += intToInput(1); // attempts
-    rv += intToInput(heroCount); // hero count
+    rv += autils.intToInput(1); // attempts
+    rv += autils.intToInput(heroCount); // hero count
 
-    if (hero1 > 0) { rv += intToInput(hero1); }
-    if (hero2 > 0) { rv += intToInput(hero2); }
-    if (hero3 > 0) { rv += intToInput(hero3); }
-    if (hero4 > 0) { rv += intToInput(hero4); }
-    if (hero5 > 0) { rv += intToInput(hero5); }
-    if (hero6 > 0) { rv += intToInput(hero6); }
+    if (hero1 > 0) { rv += autils.intToInput(hero1); }
+    if (hero2 > 0) { rv += autils.intToInput(hero2); }
+    if (hero3 > 0) { rv += autils.intToInput(hero3); }
+    if (hero4 > 0) { rv += autils.intToInput(hero4); }
+    if (hero5 > 0) { rv += autils.intToInput(hero5); }
+    if (hero6 > 0) { rv += autils.intToInput(hero6); }
 
     return rv;
 }
@@ -256,8 +205,8 @@ function gardeningQuestPattern(heroIdInt, poolIdInt) {
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // attempts
     rv += "00000000000000000000000000000000000000000000000000000000000000c0" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000001" // ? 
-    rv += intToInput(heroIdInt) // heroid
-    rv += intToInput(poolIdInt) // poolid (0x0 = one-jewel, 0x11=luna-jewel)
+    rv += autils.intToInput(heroIdInt) // heroid
+    rv += autils.intToInput(poolIdInt) // poolid (0x0 = one-jewel, 0x11=luna-jewel)
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
     rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
@@ -347,7 +296,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 
         const txn = hmy.transactions.newTx({
             to: config.questContract_21Apr2022,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -450,7 +399,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
         const txn = hmy.transactions.newTx({
             to: config.questContract_21Apr2022,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -544,7 +493,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     {
          const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -685,6 +634,8 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     let activeQuesters = heroesStruct.allQuesters
     let configGardeners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
     let liquidityPoolID = questType.poolID;
+    //console.log(activeQuesters);
+    //console.log(configForagers);
     let possibleGardeners = configGardeners.filter((e) => {
         return (activeQuesters.indexOf(e) < 0);
       });
@@ -709,9 +660,15 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     if (LocalBatching.length > 0)
     {
+        // let GasLimit = await hmy.blockchain.estimateGas({ 
+        //     to: config.questContract,
+        //     shardID: 0,
+        //     data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
+        // })
+        
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -745,7 +702,7 @@ const date = require('date-and-time');
 
 function GetCurrentDateTime()
 {
-    return date.addMinutes(new Date(Date.now()), -2);
+    return date.addMinutes(new Date(Date.now()), -1);
 }
 
 function ParseActiveQuests(activeQuests)
@@ -755,7 +712,7 @@ function ParseActiveQuests(activeQuests)
     let completedQuestsArray = [];
     let completedQuestersCountArray = []
     activeQuests.forEach(element => {
-        if (element.heroes[0].toString() !== '85100')
+        if (element.id.toString() !== "16305")
         {
             leadQuestersArray.push(element.heroes[0].toString());
             let questCompletedDate = new Date(element.completeAtTime*1000)
@@ -820,8 +777,8 @@ async function main() {
         console.log(heroesStruct);
         console.log(heroesStruct2);
 
-        await CompleteQuests(heroesStruct, config.questContract);
-        await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
+        eBreakCount += await CompleteQuests(heroesStruct, config.questContract);
+        eBreakCount += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
 
         await CheckAndSendFishers(heroesStruct2, false);
         await CheckAndSendFishers(heroesStruct2, true);
@@ -834,6 +791,8 @@ async function main() {
         await CheckAndSendJewelMiners(heroesStruct, true);
         await CheckAndSendGardeners(heroesStruct, false);
         await CheckAndSendGardeners(heroesStruct, true);
+
+        eBreakCount += await CheckAndSendStatQuests(heroesStruct2);
 
         if (oldLimit === eBreakCount)
         {
