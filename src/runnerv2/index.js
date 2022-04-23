@@ -1,46 +1,42 @@
-//const {Harmony} = require("@harmony-js/core");
-
-const {
-    numberToHex,
-    Unit,
-} = require('@harmony-js/utils');
-
 const config = require("./config.json");
-const rewardLookup = require("./rewards.json");
 const autils = require("./autils")
-const abi = require("./abi.json")
+
+const questABI_Old = require("./abi.json")
+const questABI_21apr2022 = require('./questABI_21apr2022.json')
 const GlobalSignOn = false;
+const TestSigning = true;
 
 let eBreakCount = 0;
 const eBreakLimit = 5;
 
-
-// const hmy = new Harmony(
-    // autils.getRpc(config.useRpcIndex),
-    // {
-        // chainType: ChainType.Harmony,
-        // chainId: ChainID.HmyMainnet,
-    // },
-// );
-
-
 const ethers = require('ethers');
 
-const hmy2Network = new ethers.providers.JsonRpcProvider(autils.getRpc(config.useRpcIndex));
-console.log(hmy2Network.connection)
+const hmyNetwork = new ethers.providers.JsonRpcProvider(autils.getRpc(config.useRpcIndex));
+console.log('rpc: ', hmyNetwork.connection)
 
-const hmy2Wallet = new ethers.Wallet(process.env.ETH_PRIVATE_KEY, hmy2Network);
-console.log(hmy2Wallet.address);
+const hmyWallet = new ethers.Wallet(process.env.ETH_PRIVATE_KEY, hmyNetwork);
+console.log('address: ', hmyWallet.address);
 
-const hmy2Txs = new ethers.UnsignedTransaction();
+let questContract = new ethers.Contract(config.questContract, questABI_Old, hmyNetwork);
+let questContract2 = new ethers.Contract(config.questContract, questABI_21apr2022, hmyNetwork);
 
-let questContractV2 = new ethers.Contract(config.questContract, abi, hmy2Network);
-let heroContractV2 = new ethers.Contract(config.heroContract, abi, hmy2Network);
+let heroContract = new ethers.Contract(config.heroContract, questABI_Old, hmyNetwork);
+
 
 async function getActiveQuests(latestBlock)
 {
-    questContractV2.defaultBlock = latestBlock;
-    let results = await questContractV2.functions.getActiveQuests(config.wallet)
+    console.log("getActiveQuests -- start");
+    questContract.defaultBlock = latestBlock;
+    let results = await questContract.functions.getActiveQuests(config.wallet)
+    console.log("getActiveQuests -- end");
+    return results[0]
+}
+
+async function getActiveAccountQuests(latestBlock)
+{
+    console.log("getActiveAccountQuests -- start");
+    let results = await questContract2.functions.getAccountActiveQuests(config.wallet)
+    console.log("getActiveAccountQuests -- end");
     return results[0]
 }
 
@@ -57,9 +53,10 @@ async function CompleteQuests(heroesStruct)
     if (heroesStruct.completedQuesters.length > 0)
     {
         const completedHeroId = heroesStruct.completedQuesters[0];
-        hmy2
-        const txn = hmy.transactions.newTx({
+        const txn = {
+            // contract address
             to: config.questContract,
+            // this is how much one to send
             value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
@@ -68,30 +65,30 @@ async function CompleteQuests(heroesStruct)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: completeQuestPattern(completedHeroId)
-        });
-          
+        };
+
         // sign the transaction use wallet;
-        const signedTxn = await hmy.wallet.signTransaction(txn);
+        //const signedTxn = await hmy.wallet.signTransaction(txn);
+        const signedTxn = await hmyWallet.signTransaction(txn);
         //  console.log(signedTxn);
-        if (GlobalSignOn === true)
+        if (GlobalSignOn || TestSigning)
         {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            const txnHash = await sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             console.log("Completed Quest for heroid:" + completedHeroId);
             
         }
     }
-
     return;
 }
 
 function intToInput(myint)
 {
-    return numberToHex(myint).substring(2).padStart(64,"0");
+    return parseInt(myint).toString(16).padStart(64,"0");
 }
 
 function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
@@ -282,7 +279,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 
     let FisherPromises = []
     possibleFishers.forEach(fisher => {
-        FisherPromises.push(questContractV2.methods.getCurrentStamina(fisher))
+        FisherPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(FisherPromises)
@@ -334,7 +331,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: fishingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],fishingTries)
         });
@@ -384,7 +381,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
     let ForagerPromises = []
     possibleForagers.forEach(hero => {
-        ForagerPromises.push(questContractV2.methods.getCurrentStamina(hero))
+        ForagerPromises.push(questContract.methods.getCurrentStamina(hero))
     });
 
     let staminaValues = await Promise.all(ForagerPromises)
@@ -437,7 +434,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: foragingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],foragingTries)
         });
@@ -482,7 +479,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
 
     let GoldMinerPromises = []
     possibleGoldMiners.forEach(fisher => {
-        GoldMinerPromises.push(questContractV2.methods.getCurrentStamina(fisher))
+        GoldMinerPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(GoldMinerPromises)
@@ -531,7 +528,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5])
         });
@@ -578,7 +575,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
 
     let JewelMinerPromises = []
     possibleJewelMiners.forEach(fisher => {
-        JewelMinerPromises.push(questContractV2.methods.getCurrentStamina(fisher))
+        JewelMinerPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(JewelMinerPromises)
@@ -627,7 +624,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: jewelMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5])
         });
@@ -672,7 +669,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     let GardenerPromises = []
     possibleGardeners.forEach(fisher => {
-        GardenerPromises.push(questContractV2.methods.getCurrentStamina(fisher))
+        GardenerPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
     let staminaValues = await Promise.all(GardenerPromises)
@@ -700,7 +697,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
         });
@@ -726,7 +723,7 @@ const date = require('date-and-time');
 
 function GetCurrentDateTime()
 {
-    return date.addMinutes(new Date(Date.now()), -2);
+    return date.addMinutes(new Date(Date.now()), 0);
 }
 
 function ParseActiveQuests(activeQuests)
@@ -761,7 +758,9 @@ function ParseActiveQuests(activeQuests)
 
 async function GetLatestBlock()
 {
-    const res = await hmy2Network.getBlockNumber();
+    console.log("bn1")
+    const res = await hmyNetwork.getBlockNumber();
+    console.log("bn2")
     const lastblock = parseInt(res,10);
     console.log('lastblock:', lastblock);
     return lastblock;
@@ -791,16 +790,19 @@ async function main() {
 
         // it also sets the defaultblock
         let activeQuests = await getActiveQuests(lastBlock);
+        let activeQuests2 = await getActiveAccountQuests(lastBlock);
 
         let heroesStruct = ParseActiveQuests(activeQuests);
+        let heroesStruct2 = ParseActiveQuests(activeQuests2);
         console.log(heroesStruct);
+        console.log(heroesStruct2);
 
         await CompleteQuests(heroesStruct);
 
-        await CheckAndSendFishers(heroesStruct, false);
-        await CheckAndSendFishers(heroesStruct, true);
-        await CheckAndSendForagers(heroesStruct, false);
-        await CheckAndSendForagers(heroesStruct, true);
+        await CheckAndSendFishers(heroesStruct2, false);
+        await CheckAndSendFishers(heroesStruct2, true);
+        await CheckAndSendForagers(heroesStruct2, false);
+        await CheckAndSendForagers(heroesStruct2, true);
         await CheckAndSendGoldMiners(heroesStruct, false);
         await CheckAndSendGoldMiners(heroesStruct, true);
         await CheckAndSendJewelMiners(heroesStruct, false);
@@ -830,4 +832,5 @@ async function main() {
 
 autils.log("hello world");
 main()
+process.exit(0);
 //setInterval(main, config.pollingInterval*1000);

@@ -2,15 +2,9 @@ const { Harmony } = require('@harmony-js/core');
 const {
     ChainID,
     ChainType,
-    hexToNumber,
-    numberToHex,
-    fromWei,
-    Units,
-    Unit,
-  } = require('@harmony-js/utils');
+} = require('@harmony-js/utils');
 
 const config = require("./config.json");
-const rewardLookup = require("./rewards.json");
 const autils = require("./autils")
 const abi = require("./abi.json")
 const questABI_21apr2022 = require('./questABI_21apr2022.json')
@@ -19,7 +13,7 @@ const GlobalSignOn = true;
 const { CheckAndSendStatQuests } = require('./statQuest');
 
 let eBreakCount = 0;
-const eBreakLimit = 5;
+const eBreakLimit = 10;
 
 const hmy = new Harmony(
     autils.getRpc(config.useRpcIndex),
@@ -345,7 +339,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
 
         const txn = hmy.transactions.newTx({
             to: config.questContract_21Apr2022,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -448,7 +442,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
 
         const txn = hmy.transactions.newTx({
             to: config.questContract_21Apr2022,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -542,7 +536,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     {
          const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -638,7 +632,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
     {
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID
@@ -717,7 +711,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         
         const txn = hmy.transactions.newTx({
             to: config.questContract,
-            value: new Unit(0).asOne().toWei(),
+            value: 0,
             // gas limit, you can use string
             gasLimit: config.gasLimit,
             // send token from shardID

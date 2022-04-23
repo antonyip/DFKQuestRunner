@@ -1,12 +1,12 @@
 {
     "wallet": "0x0Ba43bAe4613E03492e4C17Af3B014B6c3202B9d",
-    "pollingInterval": "60",
+    "pollingInterval": "120",
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": [],
+            "professionHeroes": ["177470","176404"],
+            "holding": ["monk9/10","pirate9/10"],
             "nonProfessionHeroes": [],
-            "holding": ["77012","121822"],
             "proMinStam": 25,
             "normMinStam": 21,
             "contractAddress": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc"
@@ -15,7 +15,7 @@
             "name": "Foraging",
             "professionHeroes": ["66330","140613","137218"],
             "nonProfessionHeroes": [],
-            "holdingArea": ["138420","85100"],
+            "holdingArea": ["138420","85100","177891"],
             "proMinStam": 25,
             "normMinStam": 21,
             "contractAddress": "0x3132c76acF2217646fB8391918D28a16bD8A8Ef4"
