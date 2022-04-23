@@ -147,11 +147,10 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
-            ++eBreakCount;
         }
-        
         console.log("Sent " + LocalBatching + " on a Fishing Quest")
+        return 1;
     }
     
-    return;
+    return 0;
 }

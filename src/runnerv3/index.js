@@ -512,10 +512,10 @@ async function main() {
         eBreakCount += await CompleteQuests(heroesStruct, config.questContract);
         eBreakCount += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
 
-        await CheckAndSendFishers(heroesStruct2, false);
-        await CheckAndSendFishers(heroesStruct2, true);
-        await CheckAndSendForagers(heroesStruct2, false);
-        await CheckAndSendForagers(heroesStruct2, true);
+        eBreakCount += await CheckAndSendFishers(heroesStruct2, false);
+        eBreakCount += await CheckAndSendFishers(heroesStruct2, true);
+        eBreakCount += await CheckAndSendForagers(heroesStruct2, false);
+        eBreakCount += await CheckAndSendForagers(heroesStruct2, true);
 
         await CheckAndSendGoldMiners(heroesStruct, false);
         await CheckAndSendGoldMiners(heroesStruct, true);
