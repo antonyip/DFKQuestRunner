@@ -23,7 +23,7 @@ module.exports.log = function log(mystring, isError)
     console.log(mystring);
     if (isError)
     {
-        fs.appendFileSync("log", (new Date()).toLocaleTimeString() + ": " + mystring+"\n");
+        fs.appendFileSync("logs", (new Date()).toLocaleTimeString() + ": " + mystring+"\n");
     }
     
 }

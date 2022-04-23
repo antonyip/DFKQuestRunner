@@ -853,5 +853,3 @@ async function testingFunc()
 
 autils.log("hello world");
 testingFunc();
-//main()
-//setInterval(main, config.pollingInterval*1000);

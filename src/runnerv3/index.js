@@ -721,7 +721,7 @@ function ParseActiveQuests(activeQuests)
                 completedQuestsArray.push(element.heroes[0].toString());
                 completedQuestersCountArray.push(element.heroes.length);
             }
-            autils.log(element.heroes[0].toString() + " Questing till: " +  questCompletedDate.toLocaleTimeString())
+            console.log(element.heroes[0].toString() + " Questing till: " +  questCompletedDate.toLocaleTimeString())
             element.heroes.forEach(hero => {
                 allQuestersArray.push(hero.toString());
             })
@@ -805,44 +805,15 @@ async function main() {
     {
         if (error.toString().includes('Maximum call stack size exceeded'))
         {
+            // can't do anything about a memory leak...
+            autils.log(error, true);
             process.exit(0);
         }
         eBreakCount += 1;
-        autils.log(error);
+        autils.log(error, true);
     }
 }
 
-async function testingFunc()
-{
-    //const result = await getActiveAccountQuests(0);
-    //const result = await getActiveQuests(0);
-    //console.log( result );
-    //const quests = ParseActiveQuests(result);
-    //CompleteQuests(quests)
-        const txn = hmy.transactions.newTx({
-            to: config.questContract_21Apr2022,
-            value: 0,
-            // gas limit, you can use string
-            gasLimit: config.gasLimit,
-            // send token from shardID
-            shardID: 0,
-            // send token to toShardID
-            toShardID: 0,
-            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: config.gasPrice,
-            // tx data
-            data: "0x2e0703dc"
-        });
-          
-        // sign the transaction use wallet;
-        const signedTxn = await hmy.wallet.signTransaction(txn);
-        console.log(signedTxn);
-        const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-        console.log(txnHash);
-        return;
-}
-
-autils.log("hello world");
-//testingFunc()
+autils.log("hello world: " + new Date().toDateString(), true);
 main()
 setInterval(main, config.pollingInterval*1000);
