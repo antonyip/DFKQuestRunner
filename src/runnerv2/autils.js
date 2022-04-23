@@ -1,5 +1,4 @@
 const config = require("./config.json");
-const rewardLookup = require("./rewards.json");
 const fs = require('fs');
 
 module.exports.getRewardDescription = function getRewardDescription(rewardAddress) {

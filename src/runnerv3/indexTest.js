@@ -10,7 +10,6 @@ const {
   } = require('@harmony-js/utils');
 
 const config = require("./config.json");
-const rewardLookup = require("./rewards.json");
 const autils = require("./autils")
 const abi = require("./abi.json")
 const questABI_21apr2022 = require('./questABI_21apr2022.json')

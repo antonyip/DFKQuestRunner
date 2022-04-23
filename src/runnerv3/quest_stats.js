@@ -12,11 +12,6 @@ const { Harmony } = require('@harmony-js/core');
 const {
     ChainID,
     ChainType,
-    hexToNumber,
-    numberToHex,
-    fromWei,
-    Units,
-    Unit,
   } = require('@harmony-js/utils');
 
 const config = require("./config.json");
@@ -31,7 +26,7 @@ const hmy = new Harmony(
 );
 hmy.wallet.addByPrivateKey(process.env.ETH_PRIVATE_KEY);
 
-const questABI_21apr2022 = require('./questABI_21apr2022.json')
+const questABI_21apr2022 = require('./abi/questABI_21apr2022.json')
 let questContract_21Apr2022 = hmy.contracts.createContract(
     questABI_21apr2022,
     config.questContract_21Apr2022,   

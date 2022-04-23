@@ -6,11 +6,12 @@ const {
 
 const config = require("./config.json");
 const autils = require("./autils")
-const abi = require("./abi.json")
-const questABI_21apr2022 = require('./questABI_21apr2022.json')
+const abi = require("./abi/abi.json")
+const questABI_21apr2022 = require('./abi/questABI_21apr2022.json')
 const GlobalSignOn = true;
 
-const { CheckAndSendStatQuests } = require('./statQuest');
+const { CheckAndSendStatQuests } = require('./quest_stats');
+const { CompleteQuests } = require('./quest_complete');
 
 let eBreakCount = 0;
 const eBreakLimit = 10;
@@ -59,50 +60,6 @@ async function getActiveAccountQuests(latestBlock)
 {
     let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call()
     return results
-}
-
-
-function completeQuestPattern(heroID)
-{
-    let rv = ""
-    rv += "0x528be0a9" // Complete Quest
-    rv += autils.intToInput(heroID) // ?
-    return rv
-}
-
-async function CompleteQuests(heroesStruct, _questContract)
-{
-    if (heroesStruct.completedQuesters.length > 0)
-    {
-        const completedHeroId = heroesStruct.completedQuesters[0];
-        const txn = hmy.transactions.newTx({
-            to: _questContract,
-            value: 0,
-            // gas limit, you can use string
-            gasLimit: config.gasLimit,
-            // send token from shardID
-            shardID: 0,
-            // send token to toShardID
-            toShardID: 0,
-            // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: config.gasPrice,
-            // tx data
-            data: completeQuestPattern(completedHeroId)
-        });
-          
-        // sign the transaction use wallet;
-        const signedTxn = await hmy.wallet.signTransaction(txn);
-        //  console.log(signedTxn);
-        if (GlobalSignOn === true)
-        {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-            console.log("!!! sending the message on the wire !!!");
-            ++eBreakCount;
-            console.log("Completed Quest for heroid:" + completedHeroId);
-            
-        }
-    }
-    return;
 }
 
 function fishingPattern(hero1,hero2,hero3,hero4,hero5,hero6,attempts)
@@ -820,8 +777,8 @@ async function main() {
         console.log(heroesStruct);
         console.log(heroesStruct2);
 
-        await CompleteQuests(heroesStruct, config.questContract);
-        await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
+        eBreakCount += await CompleteQuests(heroesStruct, config.questContract);
+        eBreakCount += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
 
         await CheckAndSendFishers(heroesStruct2, false);
         await CheckAndSendFishers(heroesStruct2, true);
