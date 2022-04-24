@@ -14,6 +14,9 @@ const questABI_21apr2022 = require('./abi/questABI_21apr2022.json')
 const { CompleteQuests } = require('./quest_complete');
 const { CheckAndSendFishers } = require('./quest_fishing');
 const { CheckAndSendForagers } = require('./quest_foraging');
+const { jewelMiningPattern } = require('./quest_jewelmining');
+const { goldMiningPattern } = require('./quest_goldmining');
+const { gardeningQuestPattern } = require('./quest_gardening');
 const { CheckAndSendStatQuests } = require('./quest_stats');
 
 // file local vars
@@ -66,99 +69,6 @@ async function getActiveAccountQuests(latestBlock)
     let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
     //console.log(JSON.stringify(results));
     return results
-}
-
-function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
-{
-    if (hero1 === 0)
-    {
-        throw new Error("Tried to send create a gold mining pattern without heroes")
-        return ""
-    }
-
-    let rv = ""
-    rv += "0xc855dea3" // start Quest
-    rv += "0000000000000000000000000000000000000000000000000000000000000060" // ?
-    rv += "000000000000000000000000569e6a4c2e3af31b337be00657b4c040c828dd73" // quest
-    let heroCount = 0;
-    if (hero1 > 0) { ++heroCount; }
-    if (hero2 > 0) { ++heroCount; }
-    if (hero3 > 0) { ++heroCount; }
-    if (hero4 > 0) { ++heroCount; }
-    if (hero5 > 0) { ++heroCount; }
-    if (hero6 > 0) { ++heroCount; }
-
-    rv += autils.intToInput(1); // attempts
-    rv += autils.intToInput(heroCount); // hero count
-
-    if (hero1 > 0) { rv += autils.intToInput(hero1); }
-    if (hero2 > 0) { rv += autils.intToInput(hero2); }
-    if (hero3 > 0) { rv += autils.intToInput(hero3); }
-    if (hero4 > 0) { rv += autils.intToInput(hero4); }
-    if (hero5 > 0) { rv += autils.intToInput(hero5); }
-    if (hero6 > 0) { rv += autils.intToInput(hero6); }
-
-    return rv;
-}
-
-function jewelMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
-{
-    if (hero1 === 0)
-    {
-        throw new Error("Tried to create a jewel mining pattern without heroes")
-        return ""
-    }
-
-    let rv = ""
-    rv += "0xc855dea3" // start Quest
-    rv += "0000000000000000000000000000000000000000000000000000000000000060" // ?
-    rv += "0000000000000000000000006ff019415ee105acf2ac52483a33f5b43eadb8d0" // quest
-    let heroCount = 0;
-    if (hero1 > 0) { ++heroCount; }
-    if (hero2 > 0) { ++heroCount; }
-    if (hero3 > 0) { ++heroCount; }
-    if (hero4 > 0) { ++heroCount; }
-    if (hero5 > 0) { ++heroCount; }
-    if (hero6 > 0) { ++heroCount; }
-
-    rv += autils.intToInput(1); // attempts
-    rv += autils.intToInput(heroCount); // hero count
-
-    if (hero1 > 0) { rv += autils.intToInput(hero1); }
-    if (hero2 > 0) { rv += autils.intToInput(hero2); }
-    if (hero3 > 0) { rv += autils.intToInput(hero3); }
-    if (hero4 > 0) { rv += autils.intToInput(hero4); }
-    if (hero5 > 0) { rv += autils.intToInput(hero5); }
-    if (hero6 > 0) { rv += autils.intToInput(hero6); }
-
-    return rv;
-}
-
-function gardeningQuestPattern(heroIdInt, poolIdInt) {
-
-    let rv = ""
-    rv += "0xf51333f5" // signature of startQuestWithData
-    rv += "0000000000000000000000000000000000000000000000000000000000000080" // not sure - some random checksum
-    rv += "000000000000000000000000e4154b6e5d240507f9699c730a496790a722df19" // GardeningQuest Contract
-    rv += "0000000000000000000000000000000000000000000000000000000000000001" // attempts
-    rv += "00000000000000000000000000000000000000000000000000000000000000c0" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000001" // ? 
-    rv += autils.intToInput(heroIdInt) // heroid
-    rv += autils.intToInput(poolIdInt) // poolid (0x0 = one-jewel, 0x11=luna-jewel)
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000180" // ?
-    rv += "00000000000000000000000000000000000000000000000000000000000001a0" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    rv += "0000000000000000000000000000000000000000000000000000000000000000" // ?
-    return rv;
 }
 
 async function CheckAndSendGoldMiners(heroesStruct, isPro)
@@ -234,7 +144,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: goldMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5])
         });
@@ -330,7 +240,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: jewelMiningPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5])
         });
@@ -409,7 +319,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
         });
@@ -430,8 +340,6 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     
     return;
 }
-
-
 
 function GetCurrentDateTime()
 {
