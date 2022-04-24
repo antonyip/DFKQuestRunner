@@ -57,18 +57,29 @@ let heroContract = hmy.contracts.createContract(
         defaultGasPrice: config.gasPrice
     })
 */
-async function getActiveQuests(latestBlock)
+async function getActiveQuests()
 {
-    questContract.defaultBlock = latestBlock;
-    let results = await questContract.methods.getActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
-    return results
+    let returnValue;
+    await questContract.methods.getActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
+    .then((res) => {
+        returnValue = res;
+    }).catch(ex => {
+        autils.log(`getActiveQuests failed: ${ex}`, true);
+        throw ex;
+    })
+    return returnValue;
 }
 
-async function getActiveAccountQuests(latestBlock)
+async function getActiveAccountQuests()
 {
-    let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
-    //console.log(JSON.stringify(results));
-    return results
+    await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
+    .then((res) => {
+        returnValue = res;
+    }).catch(ex => {
+        autils.log(`getActiveAccountQuests failed: ${ex}`, true);
+        throw ex;
+    })
+    return returnValue
 }
 
 async function CheckAndSendGoldMiners(heroesStruct, isPro)
@@ -98,8 +109,13 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         GoldMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.allSettled(GoldMinerPromises)
-
+    let staminaValues;
+    await Promise.allSettled(GoldMinerPromises)
+    .then((res) => {
+        staminaValues = res;
+    }).catch((ex) => {
+        autils.log(`GoldMinerPromises: ${ex}`, true);
+    })
     
     // Batching heroes. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -194,8 +210,13 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         JewelMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.allSettled(JewelMinerPromises)
-
+    let staminaValues;
+    await Promise.allSettled(JewelMinerPromises)
+    .then((res) => {
+        staminaValues = res;
+    }).catch((ex) => {
+        autils.log(`JewelMinerPromises: ${ex}`, true);
+    })
     
     // Batching heroes. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -288,7 +309,13 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         GardenerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.allSettled(GardenerPromises)
+    let staminaValues;
+    await Promise.allSettled(GardenerPromises)
+    .then((res) => {
+        staminaValues = res;
+    }).catch((ex) => {
+        autils.log(`GardenerPromises: ${ex}`, true);
+    })
 
     LocalBatching = []
     for (let index = 0; index < possibleGardeners.length; index++) {
@@ -404,8 +431,8 @@ async function main() {
         prevBlock = lastBlock;
 
         // it also sets the defaultblock
-        let activeQuests = await getActiveQuests(lastBlock);
-        let activeQuests2 = await getActiveAccountQuests(lastBlock);
+        let activeQuests = await getActiveQuests();
+        let activeQuests2 = await getActiveAccountQuests();
 
         let heroesStruct = ParseActiveQuests(activeQuests);
         let heroesStruct2 = ParseActiveQuests(activeQuests2);

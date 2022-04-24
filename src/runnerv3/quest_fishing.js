@@ -91,8 +91,13 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
         FisherPromises.push(questContract.methods.getCurrentStamina(fisher).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.allSettled(FisherPromises)
-    //console.log("fsh stam: " + staminaValues);
+    let staminaValues;
+    await Promise.allSettled(FisherPromises)
+    .then((res) => {
+        staminaValues = res;
+    }).catch((ex) => {
+        autils.log(`FisherPromises: ${ex}`, true);
+    })
     
     // Batching fishers. we only take 6. -> next iteration then we go again
     LocalBatching = []
