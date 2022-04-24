@@ -395,12 +395,12 @@ async function main() {
         }
 
         let lastBlock = await GetLatestBlock();
-        autils.setLatestBlockNumber(parseInt(lastBlock, 10));
         if (lastBlock <= prevBlock)
         {
             autils.log("RPC Lagging..", true);
             return;
         }
+        autils.setLatestBlockNumber(lastBlock);
         prevBlock = lastBlock;
 
         // it also sets the defaultblock
@@ -436,6 +436,7 @@ async function main() {
         }
 
         console.log("runok!");
+        console.log("");
     }
     catch(error)
     {
@@ -446,7 +447,14 @@ async function main() {
             process.exit(0);
         }
         eBreakCount += 1;
-        autils.log(error.toString(), true);
+        if (error.toString() === '[object Object]')
+        {
+            autils.log(JSON.stringify(error), true);
+        }
+        else {
+            autils.log(error.toString(), true);
+        }
+        
     }
 }
 
