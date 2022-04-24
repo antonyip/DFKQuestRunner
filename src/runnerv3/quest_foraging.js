@@ -150,7 +150,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
         // sign the transaction use wallet;
         const signedTxn = await hmy.wallet.signTransaction(txn);
         //  console.log(signedTxn);
-        if (GlobalSignOn === true)
+        if (LocalSignOn === true)
         {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");

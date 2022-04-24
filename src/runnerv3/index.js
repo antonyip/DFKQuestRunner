@@ -64,6 +64,7 @@ async function getActiveQuests(latestBlock)
 async function getActiveAccountQuests(latestBlock)
 {
     let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call()
+    //console.log(JSON.stringify(results));
     return results
 }
 
