@@ -303,12 +303,6 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     if (LocalBatching.length > 0)
     {
-        // let GasLimit = await hmy.blockchain.estimateGas({ 
-        //     to: config.questContract,
-        //     shardID: 0,
-        //     data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
-        // })
-        
         const txn = hmy.transactions.newTx({
             to: config.questContract,
             value: 0,
@@ -448,11 +442,11 @@ async function main() {
         if (error.toString().includes('Maximum call stack size exceeded'))
         {
             // can't do anything about a memory leak...
-            autils.log(error, true);
+            autils.log(error.toString(), true);
             process.exit(0);
         }
         eBreakCount += 1;
-        autils.log(error, true);
+        autils.log(error.toString(), true);
     }
 }
 

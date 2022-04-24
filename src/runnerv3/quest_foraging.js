@@ -142,7 +142,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
             // send token to toShardID
             toShardID: 0,
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-            gasPrice: new hmy.utils.Unit('30').asGwei().toWei(),
+            gasPrice: config.gasPrice,
             // tx data
             data: foragingPattern(LocalBatching[0],LocalBatching[1],LocalBatching[2],LocalBatching[3],LocalBatching[4],LocalBatching[5],foragingTries)
         });

@@ -56,7 +56,7 @@ exports.CompleteQuests = async (heroesStruct, _questContract) => {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             console.log("Completed Quest for heroid:" + completedHeroId);
-            autils.logRewards(txnHash);
+            autils.logRewards(txnHash.results);
             return 1;
         }
     }
