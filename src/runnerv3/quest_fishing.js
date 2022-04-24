@@ -87,8 +87,9 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
       });
 
     let FisherPromises = []
+    console.log('lb', autils.getLatestBlockNumber());
     possibleFishers.forEach(fisher => {
-        FisherPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+        FisherPromises.push(questContract.methods.getCurrentStamina(fisher).call(undefined, autils.getLatestBlockNumber()))
     });
 
     let staminaValues = await Promise.all(FisherPromises)

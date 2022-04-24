@@ -57,13 +57,13 @@ let heroContract = hmy.contracts.createContract(
 async function getActiveQuests(latestBlock)
 {
     questContract.defaultBlock = latestBlock;
-    let results = await questContract.methods.getActiveQuests(config.wallet).call()
+    let results = await questContract.methods.getActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
     return results
 }
 
 async function getActiveAccountQuests(latestBlock)
 {
-    let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call()
+    let results = await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
     //console.log(JSON.stringify(results));
     return results
 }
@@ -184,8 +184,8 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
       });
 
     let GoldMinerPromises = []
-    possibleGoldMiners.forEach(fisher => {
-        GoldMinerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+    possibleGoldMiners.forEach(hero => {
+        GoldMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
     let staminaValues = await Promise.all(GoldMinerPromises)
@@ -280,8 +280,8 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
       });
 
     let JewelMinerPromises = []
-    possibleJewelMiners.forEach(fisher => {
-        JewelMinerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+    possibleJewelMiners.forEach(hero => {
+        JewelMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
     let staminaValues = await Promise.all(JewelMinerPromises)
@@ -374,8 +374,8 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
       });
 
     let GardenerPromises = []
-    possibleGardeners.forEach(fisher => {
-        GardenerPromises.push(questContract.methods.getCurrentStamina(fisher).call())
+    possibleGardeners.forEach(hero => {
+        GardenerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
     let staminaValues = await Promise.all(GardenerPromises)
@@ -483,19 +483,20 @@ let prevBlock = 0;
 async function main() {
     try {
         
-        console.log(" --" + new Date().toLocaleTimeString());
-        console.log(" Sim:" + GetCurrentDateTime());
+        console.log("now(): " + new Date().toLocaleTimeString());
+        console.log("SimulatedTime: " + GetCurrentDateTime());
         const oldLimit = eBreakCount;
         if (eBreakCount > eBreakLimit)
         {
-            console.log("eBreakLimit Hit!!");
+            autils.log("eBreakLimit Hit!!", true);
             process.exit(0);
         }
 
         let lastBlock = await GetLatestBlock();
+        autils.setLatestBlockNumber(parseInt(lastBlock, 10));
         if (lastBlock <= prevBlock)
         {
-            console.log("RPC Lagging..")
+            autils.log("RPC Lagging..", true);
             return;
         }
         prevBlock = lastBlock;

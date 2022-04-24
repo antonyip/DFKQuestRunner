@@ -56,7 +56,7 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
 
         let statQuesterPromises = []
         possibleQuestHeroes.forEach(hero => {
-            statQuesterPromises.push(questContract_21Apr2022.methods.getCurrentStamina(hero).call())
+            statQuesterPromises.push(questContract_21Apr2022.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
         });
 
         let staminaValues = await Promise.all(statQuesterPromises)

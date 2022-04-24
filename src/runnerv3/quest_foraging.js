@@ -89,7 +89,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
 
     let ForagerPromises = []
     possibleForagers.forEach(hero => {
-        ForagerPromises.push(questContract.methods.getCurrentStamina(hero).call())
+        ForagerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
     let staminaValues = await Promise.all(ForagerPromises)
