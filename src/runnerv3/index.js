@@ -364,7 +364,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
 function GetCurrentDateTime()
 {
-    return date.addMinutes(new Date(Date.now()), -1);
+    return date.addMinutes(new Date(Date.now()), 0);
 }
 
 function ParseActiveQuests(activeQuests)
@@ -421,7 +421,7 @@ async function main() {
             process.exit(0);
         }
 
-        let lastBlock = await GetLatestBlock();
+        let lastBlock = await GetLatestBlock()-1;
         if (lastBlock <= prevBlock)
         {
             autils.log("RPC Lagging..", true);
