@@ -93,7 +93,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
     });
 
     let staminaValues;
-    await Promise.allSettled(ForagerPromises)
+    await Promise.all(ForagerPromises)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {

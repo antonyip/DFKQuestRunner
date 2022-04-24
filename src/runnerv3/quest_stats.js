@@ -60,7 +60,7 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
         });
 
         let staminaValues;
-        await Promise.allSettled(statQuesterPromises)
+        await Promise.all(statQuesterPromises)
         .then((res) => {
             staminaValues = res;
         }).catch((ex) => {

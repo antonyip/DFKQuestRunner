@@ -92,7 +92,7 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
     });
 
     let staminaValues;
-    await Promise.allSettled(FisherPromises)
+    await Promise.all(FisherPromises)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {

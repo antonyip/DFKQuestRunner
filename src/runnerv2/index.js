@@ -282,7 +282,7 @@ async function CheckAndSendFishers(heroesStruct, isPro)
         FisherPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
-    let staminaValues = await Promise.allSettled(FisherPromises)
+    let staminaValues = await Promise.all(FisherPromises)
     //console.log("fsh stam: " + staminaValues);
     
     // Batching fishers. we only take 6. -> next iteration then we go again
@@ -384,7 +384,7 @@ async function CheckAndSendForagers(heroesStruct, isPro)
         ForagerPromises.push(questContract.methods.getCurrentStamina(hero))
     });
 
-    let staminaValues = await Promise.allSettled(ForagerPromises)
+    let staminaValues = await Promise.all(ForagerPromises)
 
     // Batching foragers. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -482,7 +482,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         GoldMinerPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
-    let staminaValues = await Promise.allSettled(GoldMinerPromises)
+    let staminaValues = await Promise.all(GoldMinerPromises)
 
     
     // Batching heroes. we only take 6. -> next iteration then we go again
@@ -578,7 +578,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         JewelMinerPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
-    let staminaValues = await Promise.allSettled(JewelMinerPromises)
+    let staminaValues = await Promise.all(JewelMinerPromises)
 
     
     // Batching heroes. we only take 6. -> next iteration then we go again
@@ -672,7 +672,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         GardenerPromises.push(questContract.methods.getCurrentStamina(fisher))
     });
 
-    let staminaValues = await Promise.allSettled(GardenerPromises)
+    let staminaValues = await Promise.all(GardenerPromises)
 
     LocalBatching = []
     for (let index = 0; index < possibleGardeners.length; index++) {

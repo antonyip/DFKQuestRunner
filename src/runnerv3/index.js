@@ -61,11 +61,11 @@ async function getActiveQuests()
 {
     let returnValue;
     await questContract.methods.getActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
-    .then((res) => {
-        returnValue = res;
-    }).catch(ex => {
-        autils.log(`getActiveQuests failed: ${ex}`, true);
+    .catch(ex => {
+        autils.log(`getActiveQuests failed: ${JSON.stringify(ex)}`, true);
         throw ex;
+    }).then((res) => {
+        returnValue = res;
     })
     return returnValue;
 }
@@ -73,11 +73,11 @@ async function getActiveQuests()
 async function getActiveAccountQuests()
 {
     await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
-    .then((res) => {
-        returnValue = res;
-    }).catch(ex => {
-        autils.log(`getActiveAccountQuests failed: ${ex}`, true);
+    .catch(ex => {
+        autils.log(`getActiveAccountQuests failed: ${JSON.stringify(ex)}`, true);
         throw ex;
+    }).then((res) => {
+        returnValue = res;
     })
     return returnValue
 }
@@ -110,7 +110,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     });
 
     let staminaValues;
-    await Promise.allSettled(GoldMinerPromises)
+    await Promise.all(GoldMinerPromises)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
@@ -211,7 +211,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
     });
 
     let staminaValues;
-    await Promise.allSettled(JewelMinerPromises)
+    await Promise.all(JewelMinerPromises)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
@@ -310,7 +310,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     });
 
     let staminaValues;
-    await Promise.allSettled(GardenerPromises)
+    await Promise.all(GardenerPromises)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
@@ -356,7 +356,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             //  console.log(txnHash);
         }
         
-        console.log("Sent " + LocalBatching + " on a Garderning Quest")
+        console.log("Sent " + LocalBatching[0] + " on a Garderning Quest")
     }
     
     return;
@@ -437,8 +437,8 @@ async function main() {
         let heroesStruct = ParseActiveQuests(activeQuests);
         let heroesStruct2 = ParseActiveQuests(activeQuests2);
         
-        console.log(heroesStruct);
-        console.log(heroesStruct2);
+        //console.log(heroesStruct);
+        //console.log(heroesStruct2);
 
         eBreakCount += await CompleteQuests(heroesStruct, config.questContract);
         eBreakCount += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);

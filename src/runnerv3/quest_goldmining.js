@@ -1,7 +1,6 @@
 const autils = require('./autils');
 
-function goldMiningPattern(hero1,hero2,hero3,hero4,hero5,hero6)
-{
+exports.goldMiningPattern = (hero1,hero2,hero3,hero4,hero5,hero6) => {
     if (hero1 === 0)
     {
         throw new Error("Tried to send create a gold mining pattern without heroes")
