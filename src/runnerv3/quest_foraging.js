@@ -92,7 +92,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
         ForagerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.all(ForagerPromises)
+    let staminaValues = await Promise.allSettled(ForagerPromises)
 
     // Batching foragers. we only take 6. -> next iteration then we go again
     LocalBatching = []

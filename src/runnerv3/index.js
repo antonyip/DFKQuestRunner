@@ -98,7 +98,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         GoldMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.all(GoldMinerPromises)
+    let staminaValues = await Promise.allSettled(GoldMinerPromises)
 
     
     // Batching heroes. we only take 6. -> next iteration then we go again
@@ -194,7 +194,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         JewelMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.all(JewelMinerPromises)
+    let staminaValues = await Promise.allSettled(JewelMinerPromises)
 
     
     // Batching heroes. we only take 6. -> next iteration then we go again
@@ -288,7 +288,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         GardenerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues = await Promise.all(GardenerPromises)
+    let staminaValues = await Promise.allSettled(GardenerPromises)
 
     LocalBatching = []
     for (let index = 0; index < possibleGardeners.length; index++) {

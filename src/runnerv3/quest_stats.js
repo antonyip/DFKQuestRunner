@@ -59,7 +59,7 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
             statQuesterPromises.push(questContract_21Apr2022.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
         });
 
-        let staminaValues = await Promise.all(statQuesterPromises)
+        let staminaValues = await Promise.allSettled(statQuesterPromises)
 
         
         // Batching heroes. we only take 6. -> next iteration then we go again
