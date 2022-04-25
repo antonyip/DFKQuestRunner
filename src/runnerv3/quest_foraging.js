@@ -97,7 +97,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
-        autils.log(`ForagerPromises: ${ex}`, true);
+        autils.log(`ForagerPromises: ${JSON.stringify(ex)}`, true);
     })
 
     // Batching foragers. we only take 6. -> next iteration then we go again

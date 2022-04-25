@@ -314,7 +314,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
-        autils.log(`GardenerPromises: ${ex}`, true);
+        autils.log(`GardenerPromises: ${JSON.stringify(ex)}`, true);
     })
 
     LocalBatching = []

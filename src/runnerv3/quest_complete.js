@@ -65,81 +65,9 @@ exports.CompleteQuests = async (heroesStruct, _questContract) => {
             const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             console.log("Completed Quest for heroid:" + completedHeroId);
-            autils.logRewards(txnHash.result);
+            //autils.logRewards(txnHash.result);
             return 1;
         }
     }
     return 0;
-}
-
-const rewardLookup = require("./rewards.json");
-
-const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
-
-async function completeQuest(heroId) {
-    try {
-        autils.rewardLog(`Completing quest led by hero ${heroId}`);
-
-        let receipt = await tryTransaction(
-            () =>
-                questContract
-                    .connect(hmy.wallet)
-                    .completeQuest(heroId, callOptions),
-            2
-        );
-
-        autils.rewardLog(`***** Completed quest led by hero ${heroId} *****`);
-
-        let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
-        autils.rewardLog(
-            `XP: ${xpEvents.reduce(
-                (total, result) => total + Number(result.args.xpEarned),
-                0
-            )}`
-        );
-
-        let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
-        autils.rewardLog(
-            `SkillUp: ${
-                suEvents.reduce(
-                    (total, result) => total + Number(result.args.skillUp),
-                    0
-                ) / 10
-            }`
-        );
-
-        let rwEvents = receipt.events.filter((e) => e.event === "QuestReward");
-        rwEvents.forEach((result) =>
-        autils.rewardLog(
-                `${result.args.itemQuantity} x ${getRewardDescription(
-                    result.args.rewardItem
-                )}`
-            )
-        );
-
-    } catch (err) {
-        console.log(err);
-        console.warn(
-            `Error completing quest for heroId ${heroId} - this will be retried next polling interval`
-        );
-    }
-}
-
-async function tryTransaction(transaction, attempts) {
-    for (let i = 0; i < attempts; i++) {
-        try {
-            var tx = await transaction();
-            let receipt = await tx.wait();
-            if (receipt.status !== 1)
-                throw new Error(`Receipt had a status of ${receipt.status}`);
-            return receipt;
-        } catch (err) {
-            if (i === attempts - 1) throw err;
-        }
-    }
-}
-
-function getRewardDescription(rewardAddress) {
-    let desc = rewardLookup[rewardAddress];
-    return desc ? desc : rewardAddress;
 }
