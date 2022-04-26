@@ -5,7 +5,7 @@
         {
             "name": "Fishing",
             "professionHeroes": ["177470","176404"],
-            "holding": ["monk9/10","pirate9/10"],
+            "holding": ["monk6/10","pirate6/10"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 21,
@@ -96,6 +96,9 @@
         "normMinStam": 25
     }],
     "heroForSale": [
+        { "id":"121626", "price":55, "quest":"foraging", "notes":"5/10 priest5 foraging" }
+    ],
+    "heroForSale2": [
         { "id":"121626", "price":55, "notes":"5/10 priest5 foraging"},
         { "id":"103763", "price":55, "notes":"5/10 wiz6 garden" },
         { "id":"137218", "price":55, "notes":"5/10 wiz5 foraging" },
