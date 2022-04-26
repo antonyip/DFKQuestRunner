@@ -29,11 +29,12 @@ function completeQuestPattern(heroID)
 }
 
 const BigIntWithDecimalToString = (amount, decimals) => {
+    const amountBN = BigInt(amount);
     if (decimals > 0n)
     {
-        return `${(amount / decimals).toString(10)}.${amount.toString(10).split(-decimals)}`
+        return `${(amountBN / decimals).toString(10)}.${amountBN.toString(10).slice(-decimals)}`
     }
-    return amount;
+    return amountBN;
 }
 
 exports.CompleteQuests = async (heroesStruct, _questContract) => {

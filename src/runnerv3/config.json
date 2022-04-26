@@ -1,6 +1,6 @@
 {
     "wallet": "0x0Ba43bAe4613E03492e4C17Af3B014B6c3202B9d",
-    "pollingInterval": "120",
+    "pollingInterval": "60",
     "quests": [
         {
             "name": "Fishing",
@@ -30,7 +30,7 @@
             "name": "GoldMining",
             "professionHeroes": ["163261"],
             "nonProfessionHeroes": [],
-            "holdingArea": ["121822"],
+            "holdingArea": [],
             "proMinStam": 25,
             "normMinStam": 25,
             "contractAddress": "0x569e6a4c2e3af31b337be00657b4c040c828dd73"
@@ -96,7 +96,12 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"88888", "price":69 }
+        { "id":"121626", "price":55, "notes":"5/10 priest5 foraging"},
+        { "id":"103763", "price":55, "notes":"5/10 wiz6 garden" },
+        { "id":"137218", "price":55, "notes":"5/10 wiz5 foraging" },
+        { "id":"180521", "price":99, "notes":"5/5 archer rare foraging" },
+        { "id":"180221", "price":149, "notes":"5/5 ninja agi fishing" },
+        { "id":"0", "price":999 }
     ],
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",

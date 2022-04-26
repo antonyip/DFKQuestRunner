@@ -20,7 +20,7 @@ exports.REWARD_ADDRESS_TO_NAME = {
     "0x72cb10c6bfa5624dd07ef608027e366bd690048f": "Jewel"
 }
 
-exports.REWARDS_ADDRESS_TO_DECIMAL = {
+exports.REWARD_ADDRESS_TO_DECIMAL = {
     "0x72cb10c6bfa5624dd07ef608027e366bd690048f": 18n,
     "0x3a4edcf3312f44ef027acfd8c21382a5259936e7": 3n
 }

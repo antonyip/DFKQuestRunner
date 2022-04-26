@@ -402,7 +402,6 @@ async function main() {
     try {
         
         console.log("now(): " + new Date().toLocaleTimeString());
-        console.log("SimulatedTime: " + GetCurrentDateTime());
         const oldLimit = eBreakCount;
         didProcessTx = 0;
         if (eBreakCount > eBreakLimit)
