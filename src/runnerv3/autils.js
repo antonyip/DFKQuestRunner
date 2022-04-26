@@ -57,5 +57,5 @@ exports.resetRewardTxns = () =>{
 
 exports.rewardLog = (myString) => {
     console.log(myString);
-    fs.appendFileSync("logs", myString + "\n");
+    fs.appendFileSync("rewards", myString + "\n");
 }

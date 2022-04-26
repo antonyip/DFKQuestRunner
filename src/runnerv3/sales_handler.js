@@ -17,7 +17,7 @@ const hmy = new Harmony(
 hmy.wallet.addByPrivateKey(process.env.ETH_PRIVATE_KEY);
 
 exports.checkAndListHeroesForSale = (heroesStruct) => {
-
+    
 }
 
 exports.checkAndRemoveHeroesFromSale = (heroesStruct) => {

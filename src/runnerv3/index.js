@@ -109,13 +109,8 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         GoldMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues;
-    await Promise.all(GoldMinerPromises)
-    .then((res) => {
-        staminaValues = res;
-    }).catch((ex) => {
-        autils.log(`GoldMinerPromises: ${JSON.stringify(ex), staminaValues}`, true);
-    })
+    let staminaValues = await Promise.allSettled(GoldMinerPromises);
+    staminaValues = staminaValues.map(res => res = res.value?.toNumber() || 0);
     
     // Batching heroes. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -211,13 +206,8 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         JewelMinerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues;
-    await Promise.all(JewelMinerPromises)
-    .then((res) => {
-        staminaValues = res;
-    }).catch((ex) => {
-        autils.log(`JewelMinerPromises: ${JSON.stringify(ex), staminaValues}`, true);
-    })
+    let staminaValues = await Promise.allSettled(JewelMinerPromises);
+    staminaValues = staminaValues.map(res => res = res.value?.toNumber() || 0);
     
     // Batching heroes. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -311,13 +301,8 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         GardenerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues;
-    await Promise.all(GardenerPromises)
-    .then((res) => {
-        staminaValues = res;
-    }).catch((ex) => {
-        autils.log(`GardenerPromises: ${JSON.stringify(ex), staminaValues}`, true);
-    })
+    let staminaValues = await Promise.allSettled(GardenerPromises);
+    staminaValues = staminaValues.map(res => res = res.value?.toNumber() || 0);
 
     LocalBatching = []
     for (let index = 0; index < possibleGardeners.length; index++) {

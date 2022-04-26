@@ -59,15 +59,9 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
             statQuesterPromises.push(questContract_21Apr2022.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
         });
 
-        let staminaValues;
-        await Promise.all(statQuesterPromises)
-        .then((res) => {
-            staminaValues = res;
-        }).catch((ex) => {
-            autils.log(`statQuesterPromises: ${JSON.stringify(ex), staminaValues}`, true);
-        })
+        let staminaValues = await Promise.allSettled(statQuesterPromises);
+        staminaValues = staminaValues.map(res => res = res.value?.toNumber() || 0);
 
-        
         // Batching heroes. we only take 6. -> next iteration then we go again
         LocalBatching = []
         for (let index = 0; index < possibleQuestHeroes.length; index++) {

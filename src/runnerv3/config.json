@@ -95,11 +95,12 @@
         "heroes": [],
         "normMinStam": 25
     }],
-
+    "heroForSale": [
+        { "id":"88888", "price":69 }
+    ],
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",
     "heroContract": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c",
-
     "useRpcIndex": 1,
     "rpcs": 
         [
