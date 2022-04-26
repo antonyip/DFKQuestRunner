@@ -62,7 +62,7 @@ async function getActiveQuests()
     let returnValue;
     await questContract.methods.getActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
     .catch(ex => {
-        autils.log(`getActiveQuests failed: ${JSON.stringify(ex)}`, true);
+        autils.log(`getActiveQuests failed: ${JSON.stringify(ex), returnValue}`, true);
         throw ex;
     }).then((res) => {
         returnValue = res;
@@ -74,7 +74,7 @@ async function getActiveAccountQuests()
 {
     await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
     .catch(ex => {
-        autils.log(`getActiveAccountQuests failed: ${JSON.stringify(ex)}`, true);
+        autils.log(`getActiveAccountQuests failed: ${JSON.stringify(ex), returnValue}`, true);
         throw ex;
     }).then((res) => {
         returnValue = res;
@@ -114,7 +114,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
-        autils.log(`GoldMinerPromises: ${ex}`, true);
+        autils.log(`GoldMinerPromises: ${JSON.stringify(ex), staminaValues}`, true);
     })
     
     // Batching heroes. we only take 6. -> next iteration then we go again
@@ -171,16 +171,17 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             //  console.log(txnHash);
         }
         
         console.log("Sent " + LocalBatching + " on a Gold Mining Quest")
+        return 1;
     }
     
-    return;
+    return 0;
 }
 
 async function CheckAndSendJewelMiners(heroesStruct, isPro)
@@ -215,7 +216,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
-        autils.log(`JewelMinerPromises: ${ex}`, true);
+        autils.log(`JewelMinerPromises: ${JSON.stringify(ex), staminaValues}`, true);
     })
     
     // Batching heroes. we only take 6. -> next iteration then we go again
@@ -272,16 +273,17 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             //  console.log(txnHash);
         }
         
         console.log("Sent " + LocalBatching + " on a Jewel Mining Quest")
+        return 1;
     }
     
-    return;
+    return 0;
 }
 
 async function CheckAndSendGardeners(heroesStruct, isPro)
@@ -314,7 +316,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     .then((res) => {
         staminaValues = res;
     }).catch((ex) => {
-        autils.log(`GardenerPromises: ${JSON.stringify(ex)}`, true);
+        autils.log(`GardenerPromises: ${JSON.stringify(ex), staminaValues}`, true);
     })
 
     LocalBatching = []
@@ -350,16 +352,17 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             //  console.log(txnHash);
         }
         
         console.log("Sent " + LocalBatching[0] + " on a Garderning Quest")
+        return 1;
     }
     
-    return;
+    return 0;
 }
 
 function GetCurrentDateTime()
@@ -409,12 +412,14 @@ async function GetLatestBlock()
 
 // ==========================================
 let prevBlock = 0;
+let didProcessTx = 0;
 async function main() {
     try {
         
         console.log("now(): " + new Date().toLocaleTimeString());
         console.log("SimulatedTime: " + GetCurrentDateTime());
         const oldLimit = eBreakCount;
+        didProcessTx = 0;
         if (eBreakCount > eBreakLimit)
         {
             autils.log("eBreakLimit Hit!!", true);
@@ -440,24 +445,28 @@ async function main() {
         //console.log(heroesStruct);
         //console.log(heroesStruct2);
 
-        eBreakCount += await CompleteQuests(heroesStruct, config.questContract);
-        eBreakCount += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
+        didProcessTx += await CompleteQuests(heroesStruct, config.questContract);
+        didProcessTx += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
 
-        eBreakCount += await CheckAndSendFishers(heroesStruct2, false);
-        eBreakCount += await CheckAndSendFishers(heroesStruct2, true);
-        eBreakCount += await CheckAndSendForagers(heroesStruct2, false);
-        eBreakCount += await CheckAndSendForagers(heroesStruct2, true);
+        didProcessTx += await CheckAndSendFishers(heroesStruct2, false);
+        didProcessTx += await CheckAndSendFishers(heroesStruct2, true);
+        didProcessTx += await CheckAndSendForagers(heroesStruct2, false);
+        didProcessTx += await CheckAndSendForagers(heroesStruct2, true);
 
-        await CheckAndSendGoldMiners(heroesStruct, false);
-        await CheckAndSendGoldMiners(heroesStruct, true);
-        await CheckAndSendJewelMiners(heroesStruct, false);
-        await CheckAndSendJewelMiners(heroesStruct, true);
-        await CheckAndSendGardeners(heroesStruct, false);
-        await CheckAndSendGardeners(heroesStruct, true);
+        didProcessTx += await CheckAndSendGoldMiners(heroesStruct, false);
+        didProcessTx += await CheckAndSendGoldMiners(heroesStruct, true);
+        didProcessTx += await CheckAndSendJewelMiners(heroesStruct, false);
+        didProcessTx += await CheckAndSendJewelMiners(heroesStruct, true);
+        didProcessTx += await CheckAndSendGardeners(heroesStruct, false);
+        didProcessTx += await CheckAndSendGardeners(heroesStruct, true);
 
-        eBreakCount += await CheckAndSendStatQuests(heroesStruct2);
+        didProcessTx += await CheckAndSendStatQuests(heroesStruct2);
 
-        if (oldLimit === eBreakCount)
+        if (didProcessTx > 0 )
+        {
+            eBreakCount += 1;
+        }
+        else
         {
             eBreakCount = 0;
         }

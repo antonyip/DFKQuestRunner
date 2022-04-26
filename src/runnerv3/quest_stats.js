@@ -64,7 +64,7 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
         .then((res) => {
             staminaValues = res;
         }).catch((ex) => {
-            autils.log(`statQuesterPromises: ${ex}`, true);
+            autils.log(`statQuesterPromises: ${JSON.stringify(ex), staminaValues}`, true);
         })
 
         
@@ -122,7 +122,7 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
             const signedTxn = await hmy.wallet.signTransaction(txn);
             if (LocalSignOn === true)
             {
-                const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+                const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
                 console.log("!!! sending the message on the wire !!!");
             }
             

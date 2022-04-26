@@ -92,13 +92,8 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
         ForagerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues;
-    await Promise.all(ForagerPromises)
-    .then((res) => {
-        staminaValues = res;
-    }).catch((ex) => {
-        autils.log(`ForagerPromises: ${JSON.stringify(ex)}`, true);
-    })
+    let staminaValues = await Promise.allSettled(ForagerPromises);
+    staminaValues = staminaValues.map(res => res = res.value?.toNumber() || 0);
 
     // Batching foragers. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -158,7 +153,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
         //  console.log(signedTxn);
         if (LocalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
         }
         

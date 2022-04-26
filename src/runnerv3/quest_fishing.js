@@ -16,7 +16,7 @@ const hmy = new Harmony(
 );
 hmy.wallet.addByPrivateKey(process.env.ETH_PRIVATE_KEY);
 
-const questABI_21apr2022 = require('./abi/questABI_21apr2022.json')
+const questABI_21apr2022 = require('./abi/questABI_21apr2022.json');
 let questContract = hmy.contracts.createContract(
     questABI_21apr2022,
     config.questContract_21Apr2022,   
@@ -91,13 +91,8 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
         FisherPromises.push(questContract.methods.getCurrentStamina(fisher).call(undefined, autils.getLatestBlockNumber()))
     });
 
-    let staminaValues;
-    await Promise.all(FisherPromises)
-    .then((res) => {
-        staminaValues = res;
-    }).catch((ex) => {
-        autils.log(`FisherPromises: ${ex}`, true);
-    })
+    let staminaValues = await Promise.allSettled(FisherPromises);
+    staminaValues = staminaValues.map(res => res = res.value?.toNumber() || 0);
     
     // Batching fishers. we only take 6. -> next iteration then we go again
     LocalBatching = []
@@ -150,7 +145,7 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
         //  console.log(signedTxn);
         if (LocalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
         }
         console.log("Sent " + LocalBatching + " on a Fishing Quest")
