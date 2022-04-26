@@ -17,7 +17,8 @@ exports.REWARD_ADDRESS_TO_NAME = {
     "0x9678518e04fe02fb30b55e2d0e554e26306d0892": "Blue Pet Egg",
     "0x95d02c1dc58f05a015275eb49e107137d9ee81dc": "Grey Pet Egg",
     "0x24ea0d436d3c2602fbfefbe6a16bbc304c963d04": "Gaia's Tears",
-    "0x72cb10c6bfa5624dd07ef608027e366bd690048f": "Jewel"
+    "0x72cb10c6bfa5624dd07ef608027e366bd690048f": "Jewel",
+    "0x3a4edcf3312f44ef027acfd8c21382a5259936e7": "Gold",
 }
 
 exports.REWARD_ADDRESS_TO_DECIMAL = {

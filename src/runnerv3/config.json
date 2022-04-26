@@ -13,7 +13,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["66330","140613","137218"],
+            "professionHeroes": ["66330","140613","137218" ,"180616"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420","85100","177891"],
             "proMinStam": 25,
@@ -87,7 +87,7 @@
     },
     {
         "name": "StatQuest_Wis",
-        "heroes": ["139584","121626","138420","103703"],
+        "heroes": ["139584","121626","138420","103703", "179981"],
         "normMinStam": 25
     },
     {

@@ -34,7 +34,7 @@ const BigIntWithDecimalToString = (amount, decimals) => {
     {
         return `${(amountBN / decimals).toString(10)}.${amountBN.toString(10).slice(-decimals)}`
     }
-    return amountBN;
+    return `${amountBN.toString(10)}`;
 }
 
 exports.CompleteQuests = async (heroesStruct, _questContract) => {

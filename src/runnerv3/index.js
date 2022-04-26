@@ -72,9 +72,10 @@ async function getActiveQuests()
 
 async function getActiveAccountQuests()
 {
+    let returnValue;
     await questContract_21Apr2022.methods.getAccountActiveQuests(config.wallet).call(undefined, autils.getLatestBlockNumber())
     .catch(ex => {
-        autils.log(`getActiveAccountQuests failed: ${JSON.stringify(ex), returnValue}`, true);
+        autils.log(`getActiveAccountQuests failed: ${JSON.stringify(ex)} rv:${returnValue}`, true);
         throw ex;
     }).then((res) => {
         returnValue = res;
