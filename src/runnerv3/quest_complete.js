@@ -69,8 +69,8 @@ exports.CompleteQuests = async (heroesStruct, _questContract) => {
             //console.log(txnHash); // this is the txn hash object
             // printing out rewards
             if (txnHash.txStatus === 'CONFIRMED') {
-                autils.rewardLog(log.id);
-                txnHash.receipt.logs.forEach(log => {
+                autils.rewardLog(txnHash.id);
+                txnHash.receipt.logs.forEach((log) => {
                     if (log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef')
                     {
                         const rewardName = REWARD_ADDRESS_TO_NAME[log.address] || log.address;
