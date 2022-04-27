@@ -6,6 +6,7 @@ const {
 
 const config = require("./config.json");
 const autils = require("./autils")
+const axios = require('axios')
 const { SendFisherOnQuest } = require('./quest_fishing');
 const { SendForagerOnQuest } = require('./quest_foraging');
 
@@ -83,13 +84,17 @@ exports.runSalesLogic = async () => {
         // in the auction house
         if (heroOwner.toLowerCase() === '0x13a65B9F8039E2c032Bc022171Dc05B30c3f2892'.toLowerCase())
         {
-            // unlist the hero and quest
-            // stamina of hero is less then 23
-            if (staminaValues[iHeroOwner] > 24 && staminaValues[iHeroOwner] !== -1)
+            // if apiv6 says i own the hero
+            if (await isAPIv6Owner(heroList[iHeroOwner].id))
             {
-                // unlist the hero on sale
-                await unlistHero(heroList[iHeroOwner].id);
-                await questHero(heroList[iHeroOwner].id, heroList[iHeroOwner].quest);
+                // unlist the hero and quest
+                // stamina of hero is less then 23
+                if (staminaValues[iHeroOwner] > 24 && staminaValues[iHeroOwner] !== -1)
+                {
+                    // unlist the hero on sale
+                    await unlistHero(heroList[iHeroOwner].id);
+                    await questHero(heroList[iHeroOwner].id, heroList[iHeroOwner].quest);
+                }
             }
         }
 
@@ -180,6 +185,25 @@ const questHero = async (heroID, questType) => {
             break;
     }
     return;
+}
+
+const isAPIv6Owner = async (heroID) => {
+    let returnValue = false;
+    let debugData;
+    await axios.post("https://us-central1-defi-kingdoms-api.cloudfunctions.net/query_heroes",
+    {"limit":1,"params":[{"field":"id","operator":"=","value":heroID.toString()}],"offset":0}
+    ).then(reply => {
+        debugData = reply;
+        if (reply.data[0].owner_address.toLowerCase() === config.wallet.toLowerCase())
+        {
+            returnValue = true;
+        }
+    }).catch(err => {
+        returnValue = false;
+    })
+    //console.log('debugData', debugData);
+    console.log(heroID, ' isAPIv6Owner: ',returnValue);
+    return returnValue;
 }
 
 /*

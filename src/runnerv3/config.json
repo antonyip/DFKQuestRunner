@@ -96,9 +96,7 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"177470", "price":40, "quest":"fishing", "notes":"5/10 monk fishing"},
         { "id":"176404", "price":40, "quest":"fishing", "notes":"5/10 pirate fishing"},
-        { "id":"181585", "price":60, "quest":"fishing", "notes":"g2 r1 summoneer fishing" },
 
         { "id":"180521", "price":99, "quest":"foraging", "notes":"5/5 archer rare foraging" },
         { "id":"85100", "price":60, "quest":"foraging", "notes":"lv6 g2 thief foraging"},
