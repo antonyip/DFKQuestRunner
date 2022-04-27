@@ -4,7 +4,7 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["177470","176404"],
+            "professionHeroes": [],
             "holding": ["monk6/10","pirate6/10"],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
@@ -13,7 +13,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["66330","140613","137218"],
+            "professionHeroes": ["66330","140613","137218","85100","121626"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420","177891"],
             "proMinStam": 25,
@@ -67,7 +67,7 @@
     },
     {
         "name": "StatQuest_Agi",
-        "heroes": ["85100"],
+        "heroes": [],
         "normMinStam": 25
     },
     {
@@ -87,7 +87,7 @@
     },
     {
         "name": "StatQuest_Wis",
-        "heroes": ["139584","121626","138420","103703", "179981"],
+        "heroes": ["139584","138420","103703", "179981"],
         "normMinStam": 25
     },
     {
@@ -96,15 +96,18 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"180521", "price":99, "quest":"foraging", "notes":"5/5 archer rare foraging" },
-        { "id":"180221", "price":149, "quest":"fishing", "notes":"5/5 ninja agi fishing"},
         { "id":"177470", "price":40, "quest":"fishing", "notes":"5/10 monk fishing"},
         { "id":"176404", "price":40, "quest":"fishing", "notes":"5/10 pirate fishing"},
-        { "id":"85100", "price":60, "quest":"fishing", "notes":"lv6 g2 thief foraging"},
+        { "id":"181585", "price":60, "quest":"fishing", "notes":"g2 r1 summoneer fishing" },
+
+        { "id":"180521", "price":99, "quest":"foraging", "notes":"5/5 archer rare foraging" },
+        { "id":"85100", "price":60, "quest":"foraging", "notes":"lv6 g2 thief foraging"},
         { "id":"121626", "price":60, "quest":"foraging", "notes":"5/10 priest5 foraging"},
+        { "id":"137218", "price":60, "quest":"foraging", "notes":"5/10 wiz5 foraging" }
+    ],
+    "todo": [
         { "id":"103763", "price":60, "quest":"StatQuest_Int", "notes":"5/10 wiz6 garden" },
-        { "id":"137218", "price":60, "quest":"foraging", "notes":"5/10 wiz5 foraging" },
-        { "id":"180616", "price":999, "quest":"foraging", "notes":"9/10 wiz1 uncommon" }
+        { "id":"181940", "price":129, "quest":"gardening", "notes":"g2 r3 thief gardening" }
     ],
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",

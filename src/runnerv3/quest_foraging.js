@@ -163,3 +163,31 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
     
     return 0;
 }
+
+exports.SendForagerOnQuest = async (heroID, attempts) => {
+    const txn = hmy.transactions.newTx({
+        to: config.questContract_21Apr2022,
+        value: 0,
+        // gas limit, you can use string
+        gasLimit: config.gasLimit,
+        // send token from shardID
+        shardID: 0,
+        // send token to toShardID
+        toShardID: 0,
+        // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+        gasPrice: config.gasPrice,
+        // tx data
+        data: foragingPattern(heroID,0,0,0,0,0,attempts)
+    });
+      
+    // sign the transaction use wallet;
+    const signedTxn = await hmy.wallet.signTransaction(txn);
+    //  console.log(signedTxn);
+    if (LocalSignOn === true)
+    {
+        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+        console.log("!!! sending the message on the wire !!!");
+    }
+    console.log("Sent " + heroID + " on a Foraging Quest")
+    return 1;
+}

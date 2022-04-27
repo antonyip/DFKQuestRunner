@@ -6,6 +6,8 @@ const {
 
 const config = require("./config.json");
 const autils = require("./autils")
+const { SendFisherOnQuest } = require('./quest_fishing');
+const { SendForagerOnQuest } = require('./quest_foraging');
 
 const LocalSignOn = true;
 
@@ -58,7 +60,7 @@ exports.runSalesLogic = async () => {
 
     let staminaValues = await Promise.allSettled(staminaPromises)
     staminaValues = staminaValues.map( res => res.value ? Number(res.value) : -1 )
-    console.log('staminaValues', staminaValues);
+    // console.log('staminaValues', staminaValues);
 
     // get the current owners of those heroes
     const heroOwnersPromises = []
@@ -82,7 +84,7 @@ exports.runSalesLogic = async () => {
         if (heroOwner.toLowerCase() === '0x13a65B9F8039E2c032Bc022171Dc05B30c3f2892'.toLowerCase())
         {
             // unlist the hero and quest
-            // stamina of hero is less then 24
+            // stamina of hero is less then 23
             if (staminaValues[iHeroOwner] > 24 && staminaValues[iHeroOwner] !== -1)
             {
                 // unlist the hero on sale
@@ -103,6 +105,7 @@ exports.runSalesLogic = async () => {
         }
         iHeroOwner += 1;
     }
+    return;
 }
 
 const unlistHero = async (heroID) => {
@@ -131,16 +134,52 @@ const unlistHero = async (heroID) => {
         await hmy.blockchain.createObservedTransaction(signedTxn);
         autils.logSimulation(`unlisting hero: ${id} COMPLETED!`);
     }
+    return;
 }
 
 const listHero = async (heroID, price) => {
     const id = parseInt(heroID, 10);
     autils.logSimulation(`listing hero: ${parseInt(id)}: ${price}`);
+    const txn = hmy.transactions.newTx({
+        // contract address
+        to: config.tavernContract,
+        // amount of one to send
+        value: 0,
+        // gas limit, you can use string
+        gasLimit: config.gasLimit,
+        // send token from shardID
+        shardID: 0,
+        // send token to toShardID
+        toShardID: 0,
+        // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+        gasPrice: config.gasPrice,
+        // tx data
+        data: createAuctionPattern(id, price)
+    });
+    // sign the transaction use wallet;
+    const signedTxn = await hmy.wallet.signTransaction(txn);
+    if (LocalSignOn === true)
+    {
+        await hmy.blockchain.createObservedTransaction(signedTxn);
+        autils.logSimulation(`listing hero: ${id} COMPLETED!`);
+    }
+    return;
 }
 
 const questHero = async (heroID, questType) => {
     const id = parseInt(heroID, 10);
     autils.logSimulation(`questing hero: ${parseInt(id)}: ${questType}`);
+    switch (questType) {
+        case 'fishing':
+            SendFisherOnQuest(id, 5);
+            break;
+        case 'foraging':
+            SendForagerOnQuest(id, 5);
+            break;
+        default:
+            break;
+    }
+    return;
 }
 
 /*
