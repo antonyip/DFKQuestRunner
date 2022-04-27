@@ -7,6 +7,8 @@ const {
 const config = require("./config.json");
 const autils = require("./autils")
 
+const LocalSignOn = true;
+
 const hmy = new Harmony(
     autils.getRpc(config.useRpcIndex),
     {
@@ -16,37 +18,129 @@ const hmy = new Harmony(
 );
 hmy.wallet.addByPrivateKey(process.env.ETH_PRIVATE_KEY);
 
+const questABI_21apr2022 = require('./abi/questABI_21apr2022.json');
+let questContract = hmy.contracts.createContract(
+    questABI_21apr2022,
+    config.questContract_21Apr2022,   
+    {
+        defaultGas: config.gasLimit,
+        defaultGasPrice: config.gasPrice
+    });
+
+const tavernABI_27apr2022 = require('./abi/tavernABI_27apr2022.json')
+let tavernContract = hmy.contracts.createContract(
+    tavernABI_27apr2022,
+    config.tavernContract,
+    {
+        defaultGas: config.gasLimit,
+        defaultGasPrice: config.gasPrice
+    });
+
+const heroAbi = require('./abi/heroABI_27apr2022.json')
+let heroContract = hmy.contracts.createContract(
+    heroAbi,
+    config.heroContract,
+    {
+        defaultGas: config.gasLimit,
+        defaultGasPrice: config.gasPrice
+    });
+    heroContract
 
 
+exports.runSalesLogic = async () => {
 
-exports.runSalesLogic = (heroesStruct) => {
-    // foreach Hero in Array
-        // if i own the hero still
-            // if hero has >= 25 stam and is on sale
-                // unlist hero
-                // quest hero
-            // if hero has < 5 stam and is not on sale
-                // list hero
+    const heroList = config.heroForSale;
+    // get stamina of the registed heroes to be on sale
+    const staminaPromises = []
+    heroList.forEach((heroToSell) => {
+        staminaPromises.push(questContract.methods.getCurrentStamina(parseInt(heroToSell.id, 10)).call(undefined, autils.getLatestBlockNumber()))
+    })
+
+    let staminaValues = await Promise.allSettled(staminaPromises)
+    staminaValues = staminaValues.map( res => res.value ? Number(res.value) : -1 )
+    console.log('staminaValues', staminaValues);
+
+    // get the current owners of those heroes
+    const heroOwnersPromises = []
+    heroList.forEach((hero) => {
+        heroOwnersPromises.push(heroContract.methods.ownerOf(hero.id).call(undefined, autils.getLatestBlockNumber()));
+    });
+
+    let heroOwners = await Promise.allSettled(heroOwnersPromises);
+    heroOwners = heroOwners.map( res => res.value || -1)
+    console.log('heroOwners', heroOwners);
+
+    let iHeroOwner = 0;
+    for (const heroOwner of heroOwners) {
+        if (heroOwner === -1)
+        {
+            // do nothing, promise failed
+            return;
+        }
+
+        // in the auction house
+        if (heroOwner.toLowerCase() === '0x13a65B9F8039E2c032Bc022171Dc05B30c3f2892'.toLowerCase())
+        {
+            // unlist the hero and quest
+            // stamina of hero is less then 24
+            if (staminaValues[iHeroOwner] > 24 && staminaValues[iHeroOwner] !== -1)
+            {
+                // unlist the hero on sale
+                await unlistHero(heroList[iHeroOwner].id);
+                await questHero(heroList[iHeroOwner].id, heroList[iHeroOwner].quest);
+            }
+        }
+
+        // i own the hero..
+        if (heroOwner.toLowerCase() === config.wallet.toLowerCase())
+        {
+            // stamina of hero is less then 5
+            if (staminaValues[iHeroOwner] < 5 && staminaValues[iHeroOwner] !== -1)
+            {
+                // list the hero on sale
+                await listHero(heroList[iHeroOwner].id, heroList[iHeroOwner].price);
+            }
+        }
+        iHeroOwner += 1;
+    }
 }
 
-const checkHeroOwnerIsMe = (heroID) => {
-    
+const unlistHero = async (heroID) => {
+    const id = parseInt(heroID, 10);
+    autils.logSimulation(`unlisting hero: ${id}`);
+    const txn = hmy.transactions.newTx({
+        // contract address
+        to: config.tavernContract,
+        // amount of one to send
+        value: 0,
+        // gas limit, you can use string
+        gasLimit: config.gasLimit,
+        // send token from shardID
+        shardID: 0,
+        // send token to toShardID
+        toShardID: 0,
+        // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+        gasPrice: config.gasPrice,
+        // tx data
+        data: cancelAuctionPattern(id)
+    });
+    // sign the transaction use wallet;
+    const signedTxn = await hmy.wallet.signTransaction(txn);
+    if (LocalSignOn === true)
+    {
+        await hmy.blockchain.createObservedTransaction(signedTxn);
+        autils.logSimulation(`unlisting hero: ${id} COMPLETED!`);
+    }
 }
 
-const checkHeroStam = (heroID) => {
-    
+const listHero = async (heroID, price) => {
+    const id = parseInt(heroID, 10);
+    autils.logSimulation(`listing hero: ${parseInt(id)}: ${price}`);
 }
 
-const checkHeroOnSale = (heroID) => {
-    
-}
-
-const unlistHero = (heroID) => {
-
-}
-
-const questHero = (heroID) => {
-
+const questHero = async (heroID, questType) => {
+    const id = parseInt(heroID, 10);
+    autils.logSimulation(`questing hero: ${parseInt(id)}: ${questType}`);
 }
 
 /*

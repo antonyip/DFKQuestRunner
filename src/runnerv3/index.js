@@ -19,6 +19,8 @@ const { goldMiningPattern } = require('./quest_goldmining');
 const { gardeningQuestPattern } = require('./quest_gardening');
 const { CheckAndSendStatQuests } = require('./quest_stats');
 
+const { runSalesLogic } = require('./sales_handler');
+
 // file local vars
 const GlobalSignOn = true;
 let eBreakCount = 0;
@@ -432,6 +434,8 @@ async function main() {
 
         didProcessTx += await CompleteQuests(heroesStruct, config.questContract);
         didProcessTx += await CompleteQuests(heroesStruct2, config.questContract_21Apr2022);
+
+        await runSalesLogic();
 
         didProcessTx += await CheckAndSendFishers(heroesStruct2, false);
         didProcessTx += await CheckAndSendFishers(heroesStruct2, true);

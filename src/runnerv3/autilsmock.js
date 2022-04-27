@@ -18,12 +18,12 @@ exports.log = function log(mystring, isError)
     console.log(mystring);
     if (isError)
     {
-        fs.appendFileSync("logs", (new Date()).toLocaleTimeString() + ": " + mystring+"\n");
+        fs.appendFileSync("mock_logs", (new Date()).toLocaleTimeString() + ": " + mystring+"\n");
     }
 }
 
 exports.logRewards = (txnHash) => {
-    fs.appendFileSync("logs", (new Date()).toLocaleTimeString() + ": " + JSON.stringify(txnHash)+"\n");
+    fs.appendFileSync("mock_logs", (new Date()).toLocaleTimeString() + ": " + JSON.stringify(txnHash)+"\n");
 }
 
 exports.intToInput = function intToInput(myint)
@@ -34,7 +34,7 @@ exports.intToInput = function intToInput(myint)
 // latest block number
 let _localLatest = 0;
 exports.getLatestBlockNumber = () => {
-    return _localLatest;
+    return 'latest';
 }
 
 exports.setLatestBlockNumber = (latestBlock) => {
@@ -57,10 +57,10 @@ exports.resetRewardTxns = () =>{
 
 exports.rewardLog = (myString) => {
     console.log(myString);
-    fs.appendFileSync("rewards", myString + "\n");
+    fs.appendFileSync("mock_rewards", myString + "\n");
 }
 
 exports.logSimulation = (myString) => {
     console.log(myString);
-    fs.appendFileSync("simulation", myString + "\n");
+    fs.appendFileSync("mock_simulation", myString + "\n");
 }
