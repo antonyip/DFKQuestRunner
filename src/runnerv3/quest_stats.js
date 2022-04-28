@@ -194,3 +194,34 @@ const statAddress = (input) => {
         throw new Error('Invalid Stat!');
     }
 }
+
+exports.SendHeroOnStatQuest = async (heroID, questName) =>{
+    const id = parseInt(heroID,10);
+    const txn = hmy.transactions.newTx({
+        // quest contract address
+        to: config.questContract_21Apr2022,
+        // amount of one
+        value: 0,
+        // gas limit, you can use string
+        gasLimit: config.gasLimit,
+        // send token from shardID
+        shardID: 0,
+        // send token to toShardID
+        toShardID: 0,
+        // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
+        gasPrice: config.gasPrice,
+        // tx data
+        data: statQuestPattern(id, questName, 5)
+    });
+
+
+    // sign the transaction use wallet;
+    const signedTxn = await hmy.wallet.signTransaction(txn);
+    if (LocalSignOn === true)
+    {
+        console.log("!!! sending the message on the wire !!!");
+        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+        console.log("Sent " + heroID + " on a " + questName)
+    }
+    return 1;
+}

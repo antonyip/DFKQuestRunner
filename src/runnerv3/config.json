@@ -5,7 +5,7 @@
         {
             "name": "Fishing",
             "professionHeroes": [],
-            "nonProfessionHeroes": ["181940"],
+            "nonProfessionHeroes": [],
 
             "holding": [],
             "proMinStam": 25,
@@ -14,7 +14,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["66330","140613","137218","85100","121626", "180616"],
+            "professionHeroes": ["66330","140613","85100", "180616"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420","177891"],
             "proMinStam": 25,
@@ -29,7 +29,7 @@
         },
         {
             "name": "GoldMining",
-            "professionHeroes": ["163261"],
+            "professionHeroes": ["163261", "125432","155016","163379"],
             "nonProfessionHeroes": [],
             "holdingArea": [],
             "proMinStam": 25,
@@ -38,7 +38,7 @@
         },
         {
             "name": "JewelMining",
-            "professionHeroes": ["125432","155016","163379"],
+            "professionHeroes": [],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
             "normMinStam": 25,
@@ -83,12 +83,12 @@
     },
     {
         "name": "StatQuest_Int",
-        "heroes": ["138693"],
+        "heroes": [],
         "normMinStam": 25
     },
     {
         "name": "StatQuest_Wis",
-        "heroes": ["139584","138420","103703", "179981"],
+        "heroes": ["139584","138420", "179981", "103703"],
         "normMinStam": 25
     },
     {
@@ -97,14 +97,14 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"176404", "price":39, "quest":"fishing", "notes":"5/10 pirate fishing"},
-        { "id":"180521", "price":94, "quest":"foraging", "notes":"5/5 archer rare foraging" },
+        { "id":"180521", "price":89, "quest":"foraging", "notes":"5/5 archer rare foraging" },
         { "id":"121626", "price":59, "quest":"foraging", "notes":"5/10 priest5 foraging"},
-        { "id":"137218", "price":59, "quest":"foraging", "notes":"5/10 wiz5 foraging" }
+        { "id":"137218", "price":59, "quest":"foraging", "notes":"5/10 wiz5 foraging" },
+        { "id":"138693", "price":69, "quest":"fishing", "notes":"5/10 wiz5 g2 fishing" }
     ],
     "todo": [
-        { "id":"103763", "price":60, "quest":"StatQuest_Int", "notes":"5/10 wiz6 garden" },
-        { "id":"181940", "price":129, "quest":"gardening", "notes":"g2 r3 thief gardening" }
+        { "id":"103703", "price":69, "quest":"StatQuest_Wis", "notes":"5/10 pst6 g2 - broken coz can't unrent" },
+        { "id":"181940", "price":129, "quest":"-", "notes":"g2 r3 thief gardening - naked sell coz not worth to quest" }
     ],
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",

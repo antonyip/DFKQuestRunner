@@ -32,7 +32,7 @@ const BigIntWithDecimalToString = (amount, decimals) => {
     const amountBN = BigInt(amount);
     if (decimals > 0n)
     {
-        return `${amount/10n ** decimals}.${number.toString().slice(-Number(decimals))}`;
+        return `${amountBN/10n ** decimals}.${amountBN.toString().slice(-Number(decimals))}`;
     }
     return `${amountBN.toString(10)}`;
 }

@@ -444,8 +444,8 @@ async function main() {
 
         didProcessTx += await CheckAndSendGoldMiners(heroesStruct, false);
         didProcessTx += await CheckAndSendGoldMiners(heroesStruct, true);
-        didProcessTx += await CheckAndSendJewelMiners(heroesStruct, false);
-        didProcessTx += await CheckAndSendJewelMiners(heroesStruct, true);
+        //didProcessTx += await CheckAndSendJewelMiners(heroesStruct, false);
+        //didProcessTx += await CheckAndSendJewelMiners(heroesStruct, true);
         didProcessTx += await CheckAndSendGardeners(heroesStruct, false);
         didProcessTx += await CheckAndSendGardeners(heroesStruct, true);
 

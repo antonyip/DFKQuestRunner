@@ -9,6 +9,7 @@ const autils = require("./autils")
 const axios = require('axios')
 const { SendFisherOnQuest } = require('./quest_fishing');
 const { SendForagerOnQuest } = require('./quest_foraging');
+const { SendHeroOnStatQuest } = require('./quest_stats');
 
 const LocalSignOn = true;
 
@@ -183,6 +184,10 @@ const questHero = async (heroID, questType) => {
             break;
         default:
             break;
+    }
+    if (questType.includes('StatQuest_'))
+    {
+        SendHeroOnStatQuest(id, questType);
     }
     return;
 }
