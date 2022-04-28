@@ -5,15 +5,16 @@
         {
             "name": "Fishing",
             "professionHeroes": [],
-            "holding": ["monk6/10","pirate6/10"],
-            "nonProfessionHeroes": [],
+            "nonProfessionHeroes": ["181940"],
+
+            "holding": [],
             "proMinStam": 25,
             "normMinStam": 21,
             "contractAddress": "0xE259e8386d38467f0E7fFEdB69c3c9C935dfaeFc"
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["66330","140613","137218","85100","121626"],
+            "professionHeroes": ["66330","140613","137218","85100","121626", "180616"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420","177891"],
             "proMinStam": 25,
@@ -96,12 +97,10 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"176404", "price":40, "quest":"fishing", "notes":"5/10 pirate fishing"},
-
-        { "id":"180521", "price":99, "quest":"foraging", "notes":"5/5 archer rare foraging" },
-        { "id":"85100", "price":60, "quest":"foraging", "notes":"lv6 g2 thief foraging"},
-        { "id":"121626", "price":60, "quest":"foraging", "notes":"5/10 priest5 foraging"},
-        { "id":"137218", "price":60, "quest":"foraging", "notes":"5/10 wiz5 foraging" }
+        { "id":"176404", "price":39, "quest":"fishing", "notes":"5/10 pirate fishing"},
+        { "id":"180521", "price":94, "quest":"foraging", "notes":"5/5 archer rare foraging" },
+        { "id":"121626", "price":59, "quest":"foraging", "notes":"5/10 priest5 foraging"},
+        { "id":"137218", "price":59, "quest":"foraging", "notes":"5/10 wiz5 foraging" }
     ],
     "todo": [
         { "id":"103763", "price":60, "quest":"StatQuest_Int", "notes":"5/10 wiz6 garden" },
