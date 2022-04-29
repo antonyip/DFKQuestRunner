@@ -266,10 +266,9 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             ++eBreakCount;
-            //  console.log(txnHash);
         }
         
         console.log("Sent " + LocalBatching + " on a Jewel Mining Quest")
@@ -454,8 +453,8 @@ async function main() {
 
         didProcessTx += await CheckAndSendGoldMiners(heroesStruct, false);
         didProcessTx += await CheckAndSendGoldMiners(heroesStruct, true);
-        //didProcessTx += await CheckAndSendJewelMiners(heroesStruct, false);
-        //didProcessTx += await CheckAndSendJewelMiners(heroesStruct, true);
+        didProcessTx += await CheckAndSendJewelMiners(heroesStruct, false);
+        didProcessTx += await CheckAndSendJewelMiners(heroesStruct, true);
         didProcessTx += await CheckAndSendGardeners(heroesStruct, false);
         didProcessTx += await CheckAndSendGardeners(heroesStruct, true);
 

@@ -62,5 +62,5 @@ exports.rewardLog = (myString) => {
 
 exports.logSimulation = (myString) => {
     console.log(myString);
-    fs.appendFileSync("simulation", myString + "\n");
+    // fs.appendFileSync("simulation", myString + "\n");
 }
