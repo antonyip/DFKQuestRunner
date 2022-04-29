@@ -153,7 +153,7 @@ exports.CheckAndSendForagers = async (heroesStruct, isPro) => {
         //  console.log(signedTxn);
         if (LocalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
         }
         
@@ -185,8 +185,8 @@ exports.SendForagerOnQuest = async (heroID, attempts) => {
     //  console.log(signedTxn);
     if (LocalSignOn === true)
     {
-        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
         console.log("!!! sending the message on the wire !!!");
+        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
     }
     console.log("Sent " + heroID + " on a Foraging Quest")
     return 1;

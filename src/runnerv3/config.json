@@ -14,7 +14,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["66330","140613","85100", "180616"],
+            "professionHeroes": ["66330","140613", "180616"],
             "nonProfessionHeroes": [],
             "holdingArea": ["138420","177891"],
             "proMinStam": 25,
@@ -100,7 +100,9 @@
         { "id":"180521", "price":89, "quest":"foraging", "notes":"5/5 archer rare foraging" },
         { "id":"121626", "price":59, "quest":"foraging", "notes":"5/10 priest5 foraging"},
         { "id":"137218", "price":59, "quest":"foraging", "notes":"5/10 wiz5 foraging" },
+        { "id":"182459", "price":49, "quest":"foraging", "notes":"pst g2 foraging" },
         { "id":"138693", "price":69, "quest":"fishing", "notes":"5/10 wiz5 g2 fishing" }
+        
     ],
     "todo": [
         { "id":"103703", "price":69, "quest":"StatQuest_Wis", "notes":"5/10 pst6 g2 - broken coz can't unrent" },

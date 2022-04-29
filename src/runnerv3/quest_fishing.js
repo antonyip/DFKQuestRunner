@@ -145,7 +145,7 @@ exports.CheckAndSendFishers = async (heroesStruct, isPro) => {
         //  console.log(signedTxn);
         if (LocalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
         }
         console.log("Sent " + LocalBatching + " on a Fishing Quest")
@@ -176,8 +176,8 @@ exports.SendFisherOnQuest = async (heroID, attempts) => {
     //  console.log(signedTxn);
     if (LocalSignOn === true)
     {
-        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
         console.log("!!! sending the message on the wire !!!");
+        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
     }
     console.log("Sent " + heroID + " on a Fishing Quest")
     return 1;

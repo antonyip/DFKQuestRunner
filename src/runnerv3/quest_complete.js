@@ -64,12 +64,13 @@ exports.CompleteQuests = async (heroesStruct, _questContract) => {
         //  console.log(signedTxn);
         if (LocalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
             console.log("!!! sending the message on the wire !!!");
             console.log("Completed Quest for heroid:" + completedHeroId);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             //console.log(txnHash); // this is the txn hash object
             // printing out rewards
             if (txnHash.txStatus === 'CONFIRMED') {
+                autils.rewardLog('heroid: ', completedHeroId);
                 autils.rewardLog(txnHash.id);
                 txnHash.receipt.logs.forEach((log) => {
                     if (log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef')

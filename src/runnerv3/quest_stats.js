@@ -116,7 +116,7 @@ exports.CheckAndSendStatQuests = async (heroesStruct) => {
             const signedTxn = await hmy.wallet.signTransaction(txn);
             if (LocalSignOn === true)
             {
-                const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+                const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
                 console.log("!!! sending the message on the wire !!!");
             }
             
@@ -220,8 +220,8 @@ exports.SendHeroOnStatQuest = async (heroID, questName) =>{
     if (LocalSignOn === true)
     {
         console.log("!!! sending the message on the wire !!!");
-        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
-        console.log("Sent " + heroID + " on a " + questName)
+        const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
     }
+    console.log("Sent " + heroID + " on a " + questName)
     return 1;
 }

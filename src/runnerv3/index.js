@@ -169,7 +169,7 @@ async function CheckAndSendGoldMiners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             //  console.log(txnHash);
@@ -266,7 +266,7 @@ async function CheckAndSendJewelMiners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             //  console.log(txnHash);
@@ -340,7 +340,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn);
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
             ++eBreakCount;
             //  console.log(txnHash);
@@ -353,9 +353,13 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
     return 0;
 }
 
-function GetCurrentDateTime()
+function GetCurrentDateTime(useRealTime = false)
 {
-    return date.addMinutes(new Date(Date.now()), 0);
+    if (useRealTime)
+    {
+        return date.addMinutes(new Date(Date.now()), 0);
+    }
+    return date.addMinutes(new Date(Date.now()), -250);
 }
 
 function ParseActiveQuests(activeQuests)
@@ -364,12 +368,17 @@ function ParseActiveQuests(activeQuests)
     let allQuestersArray = [];
     let completedQuestsArray = [];
     let completedQuestersCountArray = []
+
+    const listOfOnSaleHeroes = config.heroForSale.map( (heroObject) => heroObject = heroObject.id );
+
     activeQuests.forEach(element => {
         if (element.id.toString() !== "16305")
         {
             leadQuestersArray.push(element.heroes[0].toString());
             let questCompletedDate = new Date(element.completeAtTime*1000)
-            if (questCompletedDate < GetCurrentDateTime())
+            // if you found the hero (index != -1) ? true : false
+            const useRealTime = (listOfOnSaleHeroes.findIndex(heroOnSale => element.heroes[0].toString() === heroOnSale) !== -1) ? true : false;
+            if (questCompletedDate < GetCurrentDateTime(useRealTime))
             {
                 completedQuestsArray.push(element.heroes[0].toString());
                 completedQuestersCountArray.push(element.heroes.length);
@@ -404,7 +413,8 @@ let didProcessTx = 0;
 async function main() {
     try {
         
-        console.log("now(): " + new Date().toLocaleTimeString());
+        console.log("now(): " + GetCurrentDateTime(true).toLocaleTimeString());
+        console.log("simTime(): " + GetCurrentDateTime().toLocaleTimeString());
         const oldLimit = eBreakCount;
         didProcessTx = 0;
         if (eBreakCount > eBreakLimit)

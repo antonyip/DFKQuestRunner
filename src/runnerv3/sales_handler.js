@@ -137,7 +137,7 @@ const unlistHero = async (heroID) => {
     const signedTxn = await hmy.wallet.signTransaction(txn);
     if (LocalSignOn === true)
     {
-        await hmy.blockchain.createObservedTransaction(signedTxn);
+        await hmy.blockchain.createObservedTransaction(signedTxn).promise;
         autils.logSimulation(`unlisting hero: ${id} COMPLETED!`);
     }
     return;
@@ -166,7 +166,7 @@ const listHero = async (heroID, price) => {
     const signedTxn = await hmy.wallet.signTransaction(txn);
     if (LocalSignOn === true)
     {
-        await hmy.blockchain.createObservedTransaction(signedTxn);
+        await hmy.blockchain.createObservedTransaction(signedTxn).promise;
         autils.logSimulation(`listing hero: ${id} COMPLETED!`);
     }
     return;
