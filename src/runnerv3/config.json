@@ -97,15 +97,16 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"180521", "price":89, "quest":"foraging", "notes":"5/5 archer rare foraging" },
-        { "id":"121626", "price":59, "quest":"foraging", "notes":"5/10 priest5 foraging"},
-        { "id":"137218", "price":59, "quest":"foraging", "notes":"5/10 wiz5 foraging" },
-        { "id":"182459", "price":49, "quest":"foraging", "notes":"pst g2 foraging" },
-        { "id":"138693", "price":69, "quest":"fishing", "notes":"5/10 wiz5 g2 fishing" }
+        { "id":"180521", "price":87, "quest":"foraging", "notes":"5/5 archer rare foraging" },
+        { "id":"121626", "price":57, "quest":"foraging", "notes":"5/10 priest5 foraging"},
+        { "id":"137218", "price":57, "quest":"foraging", "notes":"5/10 wiz5 foraging" },
+        { "id":"182459", "price":47, "quest":"foraging", "notes":"pst g2 foraging" },
+        { "id":"138693", "price":67, "quest":"fishing", "notes":"5/10 wiz5 g2 fishing" },
+        { "id":"183899", "price":98, "quest":"StatQuest_Wis", "notes":"5/5 wiz5 g2 mining" }
+        
     ],
     "todo": [
-        { "id":"103703", "price":69, "quest":"StatQuest_Wis", "notes":"5/10 pst6 g2 - broken coz can't unrent" },
-        { "id":"181940", "price":129, "quest":"-", "notes":"g2 r3 thief gardening - naked sell coz not worth to quest" }
+        { "id":"103703", "price":69, "quest":"StatQuest_Wis", "notes":"5/10 pst6 g2 - broken coz can't unrent" }
     ],
     "questContract": "0x5100Bd31b822371108A0f63DCFb6594b9919Eaf4",
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",
