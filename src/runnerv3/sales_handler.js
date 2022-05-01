@@ -103,7 +103,7 @@ exports.runSalesLogic = async () => {
         if (heroOwner.toLowerCase() === config.wallet.toLowerCase())
         {
             // stamina of hero is less then 5
-            if (staminaValues[iHeroOwner] < 5 && staminaValues[iHeroOwner] !== -1)
+            if (staminaValues[iHeroOwner] < 8 && staminaValues[iHeroOwner] !== -1)
             {
                 // list the hero on sale
                 await listHero(heroList[iHeroOwner].id, heroList[iHeroOwner].price);
@@ -182,6 +182,8 @@ const questHero = async (heroID, questType) => {
         case 'foraging':
             SendForagerOnQuest(id, 5);
             break;
+        case 'trash':
+            SendFisherOnQuest(id, 3);
         default:
             break;
     }
