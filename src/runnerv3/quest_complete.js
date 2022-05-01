@@ -79,9 +79,13 @@ exports.CompleteQuests = async (heroesStruct, _questContract) => {
                         const rewardAmount = BigIntWithDecimalToString(log.data, REWARD_ADDRESS_TO_DECIMAL[log.address] || 0n);
                         autils.rewardLog(`${rewardName}: ${rewardAmount}`);
                     }
+
+                    if (log.topics[0] === '0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62')
+                    {
+                      autils.rewardLog(`TransferSingle: ${log.topics} ${log.data}`);
+                    }
                 });
             }
-            
             return 1;
         }
     }
