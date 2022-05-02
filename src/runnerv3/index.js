@@ -358,7 +358,7 @@ function GetCurrentDateTime(useRealTime = false)
     {
         return date.addMinutes(new Date(Date.now()), 0);
     }
-    return date.addMinutes(new Date(Date.now()), -250);
+    return date.addMinutes(new Date(Date.now()), 0);
 }
 
 function ParseActiveQuests(activeQuests)
