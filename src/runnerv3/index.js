@@ -339,8 +339,8 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         //  console.log(signedTxn);
         if (GlobalSignOn === true)
         {
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             console.log("!!! sending the message on the wire !!!");
+            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
             ++eBreakCount;
             //  console.log(txnHash);
         }
@@ -409,6 +409,7 @@ async function GetLatestBlock()
 // ==========================================
 let prevBlock = 0;
 let didProcessTx = 0;
+let cleanExit = 0;
 async function main() {
     try {
         
@@ -478,7 +479,13 @@ async function main() {
         {
             // can't do anything about a memory leak...
             autils.log(error.toString(), true);
-            process.exit(0);
+            cleanExit = 1;
+        }
+        if (error.toString().includes('The transaction is still not confirmed after 20 attempts'))
+        {
+            // failure to recover from @harmony-js/core package. restart
+            autils.log(error.toString(), true);
+            cleanExit = 1;
         }
         eBreakCount += 1;
         if (error.toString() === '[object Object]')
@@ -489,6 +496,11 @@ async function main() {
             autils.log(error.toString(), true);
         }
         
+    }
+
+    if (cleanExit)
+    {
+        process.exit(0);
     }
 }
 
