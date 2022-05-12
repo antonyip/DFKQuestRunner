@@ -177,19 +177,19 @@ const questHero = async (heroID, questType) => {
     autils.logSimulation(`questing hero: ${parseInt(id)}: ${questType}`);
     switch (questType) {
         case 'fishing':
-            SendFisherOnQuest(id, 5);
+            await SendFisherOnQuest(id, 5);
             break;
         case 'foraging':
-            SendForagerOnQuest(id, 5);
+            await SendForagerOnQuest(id, 5);
             break;
         case 'trash':
-            SendFisherOnQuest(id, 3);
+            await SendFisherOnQuest(id, 3);
         default:
             break;
     }
     if (questType.includes('StatQuest_'))
     {
-        SendHeroOnStatQuest(id, questType);
+        await SendHeroOnStatQuest(id, questType);
     }
     return;
 }

@@ -96,12 +96,11 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"138693", "price":59, "quest":"fishing", "notes":"5/10 wiz5 g2 fishing" },
+        { "id":"138693", "price":59, "quest":"StatQuest_Int", "notes":"5/10 wiz5 g2 fishing" },
         { "id":"183899", "price":91, "quest":"StatQuest_Int", "notes":"5/5 wiz5 g2 mining" },
         { "id":"139584", "price":74, "quest":"StatQuest_Wis", "notes":"lv5 7/7 gen2 priest" },
         { "id":"184942", "price":69, "quest":"fishing", "notes":"7/7 thief" },
         { "id":"178011", "price":58, "quest":"foraging", "notes":"5/10 parent miner" },
-        { "id":"183198", "price":81, "quest":"fishing", "notes":"5/10 parent miner" },
         { "id":"187028", "price":70, "quest":"fishing", "notes":"5/5 rare archer" },
         { "id":"187697", "price":88, "quest":"foraging", "notes":"10/10 common archer" }
         
