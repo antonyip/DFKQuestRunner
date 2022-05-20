@@ -50,6 +50,7 @@ let heroContract = hmy.contracts.createContract(
     });
     heroContract
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 exports.runSalesLogic = async () => {
 
@@ -94,6 +95,7 @@ exports.runSalesLogic = async () => {
                 {
                     // unlist the hero on sale
                     await unlistHero(heroList[iHeroOwner].id);
+                    await delay(10000);
                     await questHero(heroList[iHeroOwner].id, heroList[iHeroOwner].quest);
                 }
             }

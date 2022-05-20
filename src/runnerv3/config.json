@@ -4,7 +4,7 @@
     "quests": [
         {
             "name": "Fishing",
-            "professionHeroes": ["187836"],
+            "professionHeroes": ["187836" , "203642"],
             "nonProfessionHeroes": [],
             "holding": ["187836: stat training"],
             "proMinStam": 25,
@@ -13,7 +13,7 @@
         },
         {
             "name": "Foraging",
-            "professionHeroes": ["66330","140613" ,"178011", "187680"],
+            "professionHeroes": ["66330","140613" , "187680", "198402", "202944"],
             "nonProfessionHeroes": [],
             "holdingArea": ["187680:stat training"],
             "proMinStam": 25,
@@ -96,14 +96,13 @@
         "normMinStam": 25
     }],
     "heroForSale": [
-        { "id":"138693", "price":59, "quest":"StatQuest_Int", "notes":"5/10 wiz5 g2 fishing" },
-        { "id":"183899", "price":91, "quest":"StatQuest_Int", "notes":"5/5 wiz5 g2 mining" },
+        { "id":"198453", "price":69, "quest":"foraging", "notes":"9/9 wiz5 g2 stat_wis" },
+        { "id":"196661", "price":69, "quest":"foraging", "notes":"9/9 wiz5 g2 stat_wis" },
+        { "id":"198402", "price":99, "quest":"foraging", "notes":"10/10 archer common" },
         { "id":"139584", "price":74, "quest":"StatQuest_Wis", "notes":"lv5 7/7 gen2 priest" },
-        { "id":"184942", "price":69, "quest":"fishing", "notes":"7/7 thief" },
-        { "id":"178011", "price":58, "quest":"foraging", "notes":"5/10 parent miner" },
-        { "id":"187028", "price":70, "quest":"fishing", "notes":"5/5 rare archer" },
-        { "id":"187697", "price":88, "quest":"foraging", "notes":"10/10 common archer" }
-        
+        { "id":"199458", "price":69, "quest":"fishing", "notes":"?" },
+        { "id":"191548", "price":69, "quest":"foraging", "notes":"?" },
+        { "id":"187028", "price":70, "quest":"fishing", "notes":"5/5 rare archer" }
     ],
     "todo": [
         { "id":"103703", "price":69, "quest":"trash", "notes":"5/10 pst6 g2 - broken coz can't unrent" }
