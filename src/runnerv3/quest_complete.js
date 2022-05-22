@@ -64,29 +64,29 @@ exports.CompleteQuests = async (heroesStruct, _questContract) => {
         //  console.log(signedTxn);
         if (LocalSignOn === true)
         {
-            console.log("!!! sending the message on the wire !!!");
-            console.log("Completed Quest for heroid:" + heroesStruct.completedQuesters[0]);
-            const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
-            //console.log(txnHash); // this is the txn hash object
-            // printing out rewards
-            if (txnHash.txStatus === 'CONFIRMED') {
-                autils.rewardLog('heroid: ' + heroesStruct.completedQuesters.join(',') + " " + new Date().toLocaleTimeString());
-                autils.rewardLog(txnHash.id);
-                txnHash.receipt.logs.forEach((log) => {
-                    if (log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef')
-                    {
-                        const rewardName = REWARD_ADDRESS_TO_NAME[log.address] || log.address;
-                        const rewardAmount = BigIntWithDecimalToString(log.data, REWARD_ADDRESS_TO_DECIMAL[log.address] || 0n);
-                        autils.rewardLog(`${rewardName}: ${rewardAmount}`);
-                    }
+          console.log("Completed Quest for heroid:" + heroesStruct.completedQuesters[0]);
+          console.log("!!! sending the message on the wire !!!");
+          const txnHash = await hmy.blockchain.createObservedTransaction(signedTxn).promise;
+          //console.log(txnHash); // this is the txn hash object
+          // printing out rewards
+          if (txnHash.txStatus === 'CONFIRMED') {
+              autils.rewardLog('heroid: ' + heroesStruct.completedQuesters.join(',') + " " + new Date().toLocaleTimeString());
+              autils.rewardLog(txnHash.id);
+              txnHash.receipt.logs.forEach((log) => {
+                  if (log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef')
+                  {
+                      const rewardName = REWARD_ADDRESS_TO_NAME[log.address] || log.address;
+                      const rewardAmount = BigIntWithDecimalToString(log.data, REWARD_ADDRESS_TO_DECIMAL[log.address] || 0n);
+                      autils.rewardLog(`${rewardName}: ${rewardAmount}`);
+                  }
 
-                    if (log.topics[0] === '0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62')
-                    {
-                      autils.rewardLog(`TransferSingle: ${log.topics} ${log.data}`);
-                    }
-                });
-            }
-            return 1;
+                  if (log.topics[0] === '0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62')
+                  {
+                    autils.rewardLog(`TransferSingle: ${log.topics} ${log.data}`);
+                  }
+              });
+          }
+          return 1;
         }
     }
     return 0;

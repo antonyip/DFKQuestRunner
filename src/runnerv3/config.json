@@ -98,11 +98,10 @@
     "heroForSale": [
         { "id":"198453", "price":69, "quest":"foraging", "notes":"9/9 wiz5 g2 stat_wis" },
         { "id":"196661", "price":69, "quest":"foraging", "notes":"9/9 wiz5 g2 stat_wis" },
-        { "id":"198402", "price":99, "quest":"foraging", "notes":"10/10 archer common" },
         { "id":"139584", "price":74, "quest":"StatQuest_Wis", "notes":"lv5 7/7 gen2 priest" },
         { "id":"199458", "price":69, "quest":"fishing", "notes":"?" },
         { "id":"191548", "price":69, "quest":"foraging", "notes":"?" },
-        { "id":"187028", "price":70, "quest":"fishing", "notes":"5/5 rare archer" }
+        { "id":"187028", "price":69, "quest":"fishing", "notes":"5/5 rare archer" }
     ],
     "todo": [
         { "id":"103703", "price":69, "quest":"trash", "notes":"5/10 pst6 g2 - broken coz can't unrent" }
