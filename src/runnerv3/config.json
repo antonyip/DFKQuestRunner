@@ -47,11 +47,12 @@
         },
         {
             "name": "Gardening",
+            "DO_NOT_USE": "5,8,12,13,14,17",
             "professionHeroes": [
-                    {"heroID": "64333", "gardenID": "2"},
-                    {"heroID": "120812", "gardenID": "1"},
+                    {"heroID": "64333", "gardenID": "3"},
+                    {"heroID": "120812", "gardenID": "2"},
                     {"heroID": "103763", "gardenID": "1"},
-                    {"heroID": "103126", "gardenID": "1"}
+                    {"heroID": "103126", "gardenID": "0"}
                 ],
             "nonProfessionHeroes": [],
             "proMinStam": 25,
