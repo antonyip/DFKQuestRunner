@@ -291,16 +291,19 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
 
     let activeQuesters = heroesStruct.allQuesters
     let configGardeners = isPro ? questType.professionHeroes : questType.nonProfessionHeroes
-    let liquidityPoolID = questType.poolID;
-    //console.log(activeQuesters);
-    //console.log(configForagers);
-    let possibleGardeners = configGardeners.filter((e) => {
-        return (activeQuesters.indexOf(e) < 0);
-      });
+
+    let possibleGardeners = [];
+    
+    if (configGardeners.length > 0)
+    {
+        possibleGardeners = configGardeners.filter((e) => {
+            return (activeQuesters.indexOf(e.heroID) < 0);
+        });
+    }
 
     let GardenerPromises = []
-    possibleGardeners.forEach(hero => {
-        GardenerPromises.push(questContract.methods.getCurrentStamina(hero).call(undefined, autils.getLatestBlockNumber()))
+    possibleGardeners.forEach(heroDetails => {
+        GardenerPromises.push(questContract.methods.getCurrentStamina(heroDetails.heroID).call(undefined, autils.getLatestBlockNumber()))
     });
 
     let staminaValues = await Promise.allSettled(GardenerPromises);
@@ -315,7 +318,12 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
         }
     }
 
-    console.log("Gardeners To Send" + (isPro ? " (P): " : " (N): ") + LocalBatching)
+    if (LocalBatching.length > 0) {
+        console.log("Gardeners To Send" + (isPro ? " (P): " : " (N): ") + LocalBatching[0].heroID);
+    }
+    else {
+        console.log("No Gardeners to Send " + (isPro ? " (P): " : " (N): "));
+    }
 
     if (LocalBatching.length > 0)
     {
@@ -331,7 +339,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
             gasPrice: config.gasPrice,
             // tx data
-            data: gardeningQuestPattern(LocalBatching[0],liquidityPoolID)
+            data: gardeningQuestPattern(LocalBatching[0].heroID,LocalBatching[0].gardenID)
         });
           
         // sign the transaction use wallet;
