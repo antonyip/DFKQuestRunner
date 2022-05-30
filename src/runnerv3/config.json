@@ -14,8 +14,8 @@
         {
             "name": "Foraging",
             "professionHeroes": ["1241", "66330","140613" , "187680", "198402",
-                    "214727", "116076",
-                    "209670","210576","209740","212327","213508","210372"],
+                    "214727", "116076", "191548",
+                    "209740", "212327", "213508", "210372"],
             "nonProfessionHeroes": [],
             "holdingArea": ["187680:stat training"],
             "proMinStam": 25,
@@ -49,6 +49,7 @@
             "name": "Gardening",
             "DO_NOT_USE": "5,8,12,13,14,17",
             "professionHeroes": [
+                    {"heroID": "215863", "gardenID": "4"},
                     {"heroID": "64333", "gardenID": "3"},
                     {"heroID": "120812", "gardenID": "2"},
                     {"heroID": "103763", "gardenID": "1"},
@@ -107,8 +108,11 @@
         { "id":"198453", "price":69, "quest":"foraging", "notes":"9/9 wiz5 g2 stat_wis" },
         { "id":"216311", "price":69, "quest":"foraging", "notes":"8/8 rare mnk5 g2 forage" },
         { "id":"139584", "price":74, "quest":"StatQuest_Wis", "notes":"lv5 7/7 gen2 priest" },
+        
+        { "id":"209670", "price":69, "quest":"foraging", "notes":"5/10 archer forager, blue dex" },
+        { "id":"216421", "price":49, "quest":"foraging", "notes":"5/5 thief forager" },
+        
         { "id":"199458", "price":59, "quest":"fishing", "notes":"?" },
-        { "id":"191548", "price":69, "quest":"foraging", "notes":"?" },
         { "id":"202944", "price":69, "quest":"foraging", "notes":"5/10 archer forager" }
     ],
     "todo": [
@@ -119,9 +123,10 @@
     "questContract_21Apr2022": "0xAa9a289ce0565E4D6548e63a441e7C084E6B52F6",
     "heroContract": "0x5f753dcdf9b1ad9aabc1346614d1f4746fd6ce5c",
     "tavernContract": "0x13a65B9F8039E2c032Bc022171Dc05B30c3f2892",
-    "useRpcIndex": 1,
+    "useRpcIndex": 0,
     "rpcs": 
         [
+            "https://nd-918-448-543.p2pify.com/4b353b2b9c548ca58a7e6e01ce3bba7a",
             "https://api.harmony.one",
             "https://harmony-0-rpc.gateway.pokt.network",
             "https://api.0xvalidator.one",

@@ -353,7 +353,7 @@ async function CheckAndSendGardeners(heroesStruct, isPro)
             //  console.log(txnHash);
         }
         
-        console.log("Sent " + LocalBatching[0] + " on a Garderning Quest")
+        console.log("Sent " + LocalBatching[0].heroID + " on a Garderning Quest")
         return 1;
     }
     
